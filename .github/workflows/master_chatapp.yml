@@ -51,7 +51,7 @@ jobs:
           path: frontend/build  
       - name: Install dependencies
         run: |
-          cd frontend
+          ls
           npm install
       - name: Login to Azure
         uses: azure/login@v2
