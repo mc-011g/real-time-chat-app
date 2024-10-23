@@ -66,6 +66,7 @@ jobs:
           package: frontend/build
           settings: |
             {
-              "WEBSITES_PORT": "5050"
+              "WEBSITES_PORT": "3000",
+              "PORT": "3000"
             }
           
