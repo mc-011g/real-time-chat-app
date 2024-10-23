@@ -23,6 +23,7 @@
     "web-vitals": "^2.1.4",
     "winston": "^3.15.0"
   },
+  "type": "module",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
