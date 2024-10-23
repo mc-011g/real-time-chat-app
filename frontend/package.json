@@ -51,7 +51,7 @@
   "jest": {
     "transform": {},
     "transformIgnorePatterns": [
-      "node_modules/(?!(axios|bootstrap)/)"
+      "node_modules/(?!(axios|bootstrap|bootstrap-icons)/)"
     ]
   }
 }
