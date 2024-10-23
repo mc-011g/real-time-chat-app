@@ -1,0 +1,227 @@
+.chatContainer {
+    height: 100vh;
+}
+
+.roomsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* For dropdown arrow */
+.dropdown-toggle {
+    /* Chrome */
+    -webkit-appearance: none;
+    /* Firefox */
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.loginContainer,
+.registerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.loginForm,
+.registerForm {
+    width: 500px;
+    min-height: 500px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-radius: 0.375rem;
+}
+
+.roomName {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.joinRoomContainer {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.joinRoom {
+    text-align: center;
+    height: 500px;
+    width: 500px;
+    align-content: center;
+}
+
+.btn:disabled {
+    border-color: #ffffff00;
+}
+
+.dropdown-toggle::-ms-expand {
+    display: none;
+}
+
+.passwordInput {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.passwordVisiblityToggleButton {
+    position: absolute;
+    right: 0.75rem;
+    cursor: pointer;
+}
+
+.sideBarProfileText {
+    overflow: hidden;
+    text-align: left;
+    overflow-wrap: break-word;
+}
+
+.roomParticipantsButton {
+    padding: 0px;
+    color: rgb(78, 78, 78);
+}
+
+.roomListRoomContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.roomListLastMessage {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.roomListImageEmpty {
+    min-width: 50px;
+    min-height: 50px;
+    margin-right: 0.5rem;
+}
+
+.roomListImage {
+    min-width: 50px;
+    min-height: 50px;
+    border-radius: 100%;
+    width: 50px !important;
+    height: 50px !important;
+    background-color: rgb(160, 160, 160);
+    margin-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.userListImage {
+    background-color: rgb(140, 162, 229) !important;
+}
+
+.profilePictureLarge {
+    width: 200px !important;
+    height: 200px !important;
+    font-size: xxx-large !important;
+}
+
+.chatSideBar {
+    min-width: 250px;
+    max-width: 250px;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.profilePicture {
+    width: 95px;
+    height: 95px;
+    background-color: #8ca2e5;
+    border-radius: 100%;
+    text-align: center;
+    align-content: center;
+    color: white;
+    font-size: xx-large;
+    border: none;
+}
+
+.messageInput {
+    border-radius: 0.375rem;
+    border: 1px solid;
+    border-color: rgb(230, 230, 230);
+}
+
+.messageInput:focus {
+    background-color: cadetblue;
+}
+
+.userIconSmall {
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    background-color: black;
+}
+
+.roomParticipant:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.room {
+    padding: 5px;
+    border-radius: 0.6rem;
+}
+
+.room:hover {
+    background-color: rgb(230, 230, 230);
+    cursor: pointer;
+}
+
+.roomSelected {
+    background-color: rgb(212, 212, 212);
+    cursor: pointer;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sentMessageContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.receivedMessageContainer {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.sentMessage,
+.receivedMessage {
+    border-radius: 0.6rem;
+    padding: 0.6rem;
+    display: flex;
+    color: white;
+    flex-direction: column;
+}
+
+.sentMessage {
+    background-color: rgb(103, 138, 255);
+    align-self: flex-end;
+    display: flex;
+}
+
+.receivedMessage {
+    background-color: rgb(138, 138, 138);
+    border-radius: 0.75rem;
+    align-self: flex-start;
+}
