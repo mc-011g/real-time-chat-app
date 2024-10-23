@@ -64,9 +64,3 @@ jobs:
           app-name: 'chatapp'
           slot-name: 'Production'
           package: frontend/build
-          settings: |
-            {
-              "WEBSITES_PORT": "3000",
-              "PORT": "3000"
-            }
-          
