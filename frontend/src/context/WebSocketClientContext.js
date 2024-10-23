@@ -1,7 +1,7 @@
 import { Client } from "@stomp/stompjs";
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import SockJS from "sockjs-client";
-import { getToken } from "../services/jwtUtils";
+import { getToken } from "../services/jwtUtils.js";
 import logger from "../services/logger.js";
 import { fetchIfUserHasRoom } from "../services/fetchIfUserHasRoom.js";
 
