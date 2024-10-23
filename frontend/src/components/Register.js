@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useEffect, useState } from "react";
-import { validate } from "../services/inputValidation";
+import { validate } from "../services/inputValidation.js";
 
 const Register = () => {
 

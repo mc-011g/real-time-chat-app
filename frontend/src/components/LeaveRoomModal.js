@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
-import axiosInstance from "../services/axiosInstance";
+import axiosInstance from "../services/axiosInstance.js";
 import logger from "../services/logger.js";
 
 const LeaveRoomModal = ({ leaveRoom, currentRoomId }) => {

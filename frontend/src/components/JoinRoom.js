@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../services/axiosInstance";
+import axiosInstance from "../services/axiosInstance.js";
 import { useContext } from "react";
-import { RoomContext } from "../context/RoomContext";
+import { RoomContext } from "../context/RoomContext.js";
 
 const JoinRoom = () => {
     const navigate = useNavigate();

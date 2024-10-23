@@ -1,18 +1,18 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { fetchRooms } from "../services/fetchRooms";
-import CreateRoomModal from "./CreateRoomModal";
-import MessageList from "./MessageList";
-import { getUserRole, checkIfTokenExpired, getToken } from "../services/jwtUtils";
+import { fetchRooms } from "../services/fetchRooms.js";
+import CreateRoomModal from "./CreateRoomModal.js";
+import MessageList from "./MessageList.js";
+import { getUserRole, checkIfTokenExpired, getToken } from "../services/jwtUtils.js";
 import { useLocation, useNavigate } from "react-router-dom"
-import RoomParticipantsModal from "./RoomParticipantsModal";
-import { fetchProfileInformation } from "../services/fetchProfileInformation";
-import { RoomContext } from "../context/RoomContext";
-import DeleteRoomModal from "./DeleteRoomModal";
-import LeaveRoomModal from "./LeaveRoomModal";
-import { CustomToolTip } from "./CustomToolTip";
-import CustomToast from "./CustomToast";
-import { WebSocketClientContext } from "../context/WebSocketClientContext";
-import ChangeRoomNameModal from "./ChangeRoomNameModal";
+import RoomParticipantsModal from "./RoomParticipantsModal.js";
+import { fetchProfileInformation } from "../services/fetchProfileInformation.js";
+import { RoomContext } from "../context/RoomContext.js";
+import DeleteRoomModal from "./DeleteRoomModal.js";
+import LeaveRoomModal from "./LeaveRoomModal.js";
+import { CustomToolTip } from "./CustomToolTip.js";
+import CustomToast from "./CustomToast.js";
+import { WebSocketClientContext } from "../context/WebSocketClientContext.js";
+import ChangeRoomNameModal from "./ChangeRoomNameModal.js";
 import logger from "../services/logger.js";
 
 const ChatDashboard = () => {

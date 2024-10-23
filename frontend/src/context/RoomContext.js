@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import axiosInstance from "../services/axiosInstance";
+import axiosInstance from "../services/axiosInstance.js";
 import { jwtDecode } from "jwt-decode";
 import logger from "../services/logger.js";
 

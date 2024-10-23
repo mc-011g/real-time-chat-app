@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
-import axiosInstance from "../services/axiosInstance";
-import { CustomToolTip } from "./CustomToolTip";
-import { validate } from "../services/inputValidation";
+import axiosInstance from "../services/axiosInstance.js";
+import { CustomToolTip } from "./CustomToolTip.js";
+import { validate } from "../services/inputValidation.js";
 
 const CreateRoomModal = ({ addNewRoom }) => {
     const [show, setShow] = useState(false);

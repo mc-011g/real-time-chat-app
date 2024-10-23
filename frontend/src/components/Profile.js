@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import axiosInstance from "../services/axiosInstance";
-import { fetchProfileInformation } from "../services/fetchProfileInformation";
+import axiosInstance from "../services/axiosInstance.js";
+import { fetchProfileInformation } from "../services/fetchProfileInformation.js";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { checkIfTokenExpired } from "../services/jwtUtils";
-import CustomToast from "./CustomToast";
+import { checkIfTokenExpired } from "../services/jwtUtils.js";
+import CustomToast from "./CustomToast.js";
 import logger from "../services/logger.js";
 import { validate } from "../services/inputValidation.js";
 

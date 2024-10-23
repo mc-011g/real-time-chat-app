@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useContext, useState } from "react";
-import { RoomContext } from "../context/RoomContext";
+import { RoomContext } from "../context/RoomContext.js";
 import logger from "../services/logger.js";
 import { validate } from "../services/inputValidation.js";
 

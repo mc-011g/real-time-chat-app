@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "./axiosInstance.js";
 import logger from "../services/logger.js";
 
 export const fetchRoomUsers = async (roomId) => {

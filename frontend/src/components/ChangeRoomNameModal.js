@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
-import axiosInstance from "../services/axiosInstance";
-import { getUserEmail } from "../services/jwtUtils";
+import axiosInstance from "../services/axiosInstance.js";
+import { getUserEmail } from "../services/jwtUtils.js";
 import logger from "../services/logger.js";
 import { validate } from "../services/inputValidation.js";
 

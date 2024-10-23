@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { fetchMessages } from "../services/fetchMessages";
-import { getToken } from "../services/jwtUtils";
-import { fetchRoomUsers } from "../services/fetchRoomUsers";
-import { CustomToolTip } from "./CustomToolTip";
+import { fetchMessages } from "../services/fetchMessages.js";
+import { getToken } from "../services/jwtUtils.js";
+import { fetchRoomUsers } from "../services/fetchRoomUsers.js";
+import { CustomToolTip } from "./CustomToolTip.js";
 import { useLocation, useNavigate } from "react-router-dom";
-import { WebSocketClientContext } from "../context/WebSocketClientContext";
-import { fetchAllRoomUsers } from "../services/fetchAllRoomUsers";
+import { WebSocketClientContext } from "../context/WebSocketClientContext.js";
+import { fetchAllRoomUsers } from "../services/fetchAllRoomUsers.js";
 import logger from "../services/logger.js";
 
 const MessageList = ({ roomId, locationState, deleteRoom, user, setUser, updateRoomInfo }) => {

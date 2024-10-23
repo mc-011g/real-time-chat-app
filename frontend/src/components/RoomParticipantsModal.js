@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Modal, Button } from 'react-bootstrap';
-import CreateInvitationModal from "./CreateInvitationModal";
-import { CustomToolTip } from "./CustomToolTip";
+import CreateInvitationModal from "./CreateInvitationModal.js";
+import { CustomToolTip } from "./CustomToolTip.js";
 
 const RoomParticipantsModal = ({ room, roomUsers }) => {
     const [show, setShow] = useState(false);
