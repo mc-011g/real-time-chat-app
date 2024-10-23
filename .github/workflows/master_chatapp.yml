@@ -5,8 +5,8 @@ name: Build and deploy Node.js app to Azure Web App - chatapp
 
 on:
   push:
-    branches:
-      - master
+    paths:
+      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
@@ -23,6 +23,7 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+          cd frontend
           npm install
           npm run build --if-present
           npm run test --if-present
@@ -67,5 +68,5 @@ jobs:
         with:
           app-name: 'chatapp'
           slot-name: 'Production'
-          package: .
+          package: frontend/
           
