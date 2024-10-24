@@ -50,7 +50,9 @@ jobs:
           name: node-app
 
       - name: 'test'
-        run: ls 
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
           
       - name: Login to Azure
         uses: azure/login@v2
