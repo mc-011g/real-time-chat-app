@@ -50,7 +50,7 @@ jobs:
           name: node-app
 
       - name: 'test'
-        run: ls
+        run: export PORT=3000
           
       - name: Login to Azure
         uses: azure/login@v2
