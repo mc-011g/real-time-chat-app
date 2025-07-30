@@ -16,13 +16,12 @@ admin.initializeApp({
 const app = express();
 const server = createServer(app);
 
-const io = new Server({
+const io = new Server(server, {
     cors: {
         origin: process.env.BASE_URL
     }
 });
 
-io.listen(4000);
 app.use(express.json());
 
 let db;
