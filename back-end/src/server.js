@@ -642,7 +642,7 @@ app.put('/api/chat/group/:id/users', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 async function start() {
     await connectToDB();
