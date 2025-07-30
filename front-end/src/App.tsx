@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import ChatPage from './pages/ChatPage';
+import NotFoundPage from './pages/NotFoundPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import JoinChatRoomPage from './pages/JoinGroupPage';
+import ProfilePage from './pages/ProfilePage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import JoinGroupPage from './pages/JoinGroupPage';
+import { useEffect } from 'react';
+import { socket } from './socket';
+import { UserProvider } from './context/UserContext';
+import PleaseVerifyEmailPage from './pages/PleaseVerifyEmailPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    return () => {
+      socket.disconnect();
+    }
+  }, []);
+
+  const routes = [{
+    path: '/',
+    element: <Outlet />,
+    errorElement: <NotFoundPage />,
+    children: [{
+      path: '/',
+      element: <ProtectedRoute><ChatPage /></ProtectedRoute>
+    }, {
+      path: '/login',
+      element: <LoginPage />
+    }, {
+      path: '/register',
+      element: <RegisterPage />
+    }, {
+      path: '/please-verify-email',
+      element: <PleaseVerifyEmailPage />
+    }, {
+      path: '/join-room/:roomId',
+      element:
+        <ProtectedRoute><JoinChatRoomPage /></ProtectedRoute>
+    }, {
+      path: '/profile',
+      element: <ProtectedRoute><ProfilePage /></ProtectedRoute>
+    }, {
+      path: '/forgot-password',
+      element: <ForgotPasswordPage />
+    }, {
+      path: 'join-group/:id',
+      element: <JoinGroupPage />
+    }]
+  }]
+
+  const router = createBrowserRouter(routes);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <UserProvider>
+        <RouterProvider router={router} />
+      </UserProvider>
     </>
   )
 }
 
-export default App
+export default App;
