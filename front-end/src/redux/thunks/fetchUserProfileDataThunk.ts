@@ -15,7 +15,7 @@ export const fetchUserProfileDataThunk = () => async (dispatch: (arg0: { payload
     }
 
     try {
-        const response = await axios.get('/api/user/profile', { headers });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/profile`, { headers });
         const userProfileData: User = response.data;
         dispatch(updateUserProfileData(userProfileData));
 

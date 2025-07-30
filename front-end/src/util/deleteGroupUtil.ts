@@ -10,7 +10,7 @@ export const deleteGroupUtil = (user: User, groupId: string) => async () => {
     }
 
     try {
-        await axios.delete('/api/chat/group/' + groupId, { headers });
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/chat/group/${groupId}`, { headers });
         return { success: true };
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {

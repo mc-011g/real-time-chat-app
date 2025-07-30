@@ -37,7 +37,7 @@ export default function LeaveGroupModal({ setShowModal, setToast, setLeaveGroupM
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
 
-        const response = await axios.put('/api/chat/group/' + selectedGroup._id + '/users', {}, { headers });
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/chat/group/${selectedGroup._id}/users`, {}, { headers });
         const updatedGroupId = response.data;
 
         dispatch(deleteGroup({ _id: updatedGroupId }));

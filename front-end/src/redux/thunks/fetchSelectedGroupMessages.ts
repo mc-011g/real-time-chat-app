@@ -21,7 +21,7 @@ export const fetchSelectedGroupMessages = (
         dispatch(setMessagesLoading(true));
 
         try {
-            const response = await axios.get('/api/chat/group/' + groupId + '/messages', { headers });
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/chat/group/${groupId}/messages`, { headers });
             const groupMessages = response.data;
 
             dispatch(initializeSelectedGroupMessages({ groupId, messages: groupMessages }));

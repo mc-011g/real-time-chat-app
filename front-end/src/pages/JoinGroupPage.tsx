@@ -26,7 +26,7 @@ export default function JoinGroupPage() {
         const headers = token ? { authtoken: token } : {};
 
         try {
-            const response = await axios.put('/api/groups/invitation/' + params.id, {}, { headers });
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/groups/invitation/${params.id}`, {}, { headers });
             const { user, group } = response.data;
 
             socket.emit('join-group', group._id);

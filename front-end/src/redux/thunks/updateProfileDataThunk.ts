@@ -14,7 +14,7 @@ export const updateUserProfileDataThunk = (user: FirebaseUser, formData: User) =
     }
 
     try {
-        const response = await axios.put('/api/user/profile', {
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/user/profile`, {
             email,
             firstName,
             lastName

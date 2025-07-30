@@ -89,7 +89,7 @@ export default function RegisterPage() {
         }
 
         try {
-            await axios.post('/api/users/auth/register', { id: uid, email: registeredEmail, firstName, lastName });
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/users/auth/register`, { id: uid, email: registeredEmail, firstName, lastName });
             navigate("/please-verify-email");
         } catch (error) {
             if (axios.isAxiosError(error)) {

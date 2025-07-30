@@ -20,7 +20,7 @@ export const fetchUserGroupsThunk = (user: User) => async (
     dispatch(setGroupLoading(true));
 
     try {
-        const response = await axios.get('/api/user/groups', { headers });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/groups`, { headers });
         const userGroups: GroupType[] = response.data;
 
         dispatch(initializeGroups(userGroups));

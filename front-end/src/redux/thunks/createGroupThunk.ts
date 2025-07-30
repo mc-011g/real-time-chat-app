@@ -14,7 +14,7 @@ export const createGroupThunk = (user: User, name: string) => async (dispatch: (
     }
 
     try {
-        const response = await axios.post('/api/chat/group', { name }, { headers });
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/chat/group`, { name }, { headers });
         const newGroup: GroupType = response.data;
 
         window.localStorage.setItem('selectedGroupId', newGroup._id);

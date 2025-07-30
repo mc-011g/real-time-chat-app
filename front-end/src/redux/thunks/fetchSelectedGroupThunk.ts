@@ -13,7 +13,7 @@ export const fetchSelectedGroupThunk = (user: FirebaseUser, groupId: string) => 
     }
 
     try {
-        const response = await axios.get('/api/chat/group/' + groupId, { headers });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/chat/group/'${groupId}`, { headers });
         const selectedGroupId = response.data;
         window.localStorage.setItem('selectedGroupId', groupId);
         dispatch(setSelectedGroup(selectedGroupId));

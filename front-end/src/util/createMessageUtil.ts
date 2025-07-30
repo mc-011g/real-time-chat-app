@@ -12,7 +12,7 @@ export const createMessageUtil = (user: User, message: MessageType) => async () 
     }
 
     try {
-        await axios.post('/api/chat/group/' + message.groupId + '/send-message', { message }, { headers });
+        await axios.post(`${import.meta.env.VITE_API_URL}/api/chat/group/${message.groupId}/send-message`, { message }, { headers });
         return { success: true };
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {

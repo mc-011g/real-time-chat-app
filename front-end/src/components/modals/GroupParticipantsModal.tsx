@@ -42,7 +42,7 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
         const token = user && await user.getIdToken();
         const headers = token ? { authtoken: token } : {};
 
-        const response = await axios.get('/api/chat/group/' + selectedGroup?._id + '/participants', { headers });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/chat/group/${selectedGroup?._id}/participants`, { headers });
 
         dispatch(setSelectedGroupParticipants({ users: response.data, groupId: selectedGroup._id }));
         setIsLoadingParticipants(false);
@@ -63,7 +63,7 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
     }
 
     try {
-      const response = await axios.post('/api/chat/group/' + selectedGroup._id + '/create-invitation', {}, { headers });
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/chat/group/${selectedGroup._id}/create-invitation`, {}, { headers });
 
       setInvitationLink(response.data);
       setInvitationCreated(true);

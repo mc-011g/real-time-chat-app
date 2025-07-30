@@ -9,7 +9,7 @@ export const loginThunk = (user: FirebaseUser | null) => async (dispatch: (arg0:
     const headers = token ? { authtoken: token } : {};
 
     try {
-        const response = await axios.get('/api/user/profile', { headers });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/user/profile`, { headers });
         const userData: User = response.data;
 
         dispatch(initializeUserData(userData));
