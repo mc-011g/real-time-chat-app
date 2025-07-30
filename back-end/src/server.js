@@ -1,5 +1,5 @@
 import express from 'express';
-import { MongoClient, ServerApiVersion, ObjectId, UUID } from 'mongodb';
+import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import admin from 'firebase-admin';
 import fs from 'fs';
 import 'dotenv/config';
@@ -42,6 +42,16 @@ async function connectToDB() {
     await client.connect();
     db = client.db(process.env.DB_NAME);
 }
+
+const allowedOrigins = [
+    'https://real-time-chat-app-4c9c5.web.app',
+    'https://real-time-chat-app-4c9c5.firebaseapp.com',
+];
+
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
 
 //Register
 app.post('/api/users/auth/register', async (req, res) => {
