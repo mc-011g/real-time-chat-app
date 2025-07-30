@@ -6,8 +6,9 @@ import 'dotenv/config';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { v4 as uuidv4 } from 'uuid';
+import cors from 'cors';
 
-const credentials = JSON.parse(fs.readFileSync('/etc/secrets/firebase-credentials.json'));
+const credentials = JSON.parse(fs.readFileSync('./etc/secrets/firebase-credentials.json'));
 
 admin.initializeApp({
     credential: admin.credential.cert(credentials)
