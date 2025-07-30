@@ -5,5 +5,5 @@ npm-debug.log
 back-end/credentials.json
 back-end/dist
 back-end/prod-env.yaml
-back-end/firebase-credentials.json
+back-end/etc/secrets/firebase-credentials.json
 .env

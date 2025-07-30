@@ -7,7 +7,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { v4 as uuidv4 } from 'uuid';
 
-const credentials = JSON.parse(fs.readFileSync('firebase-credentials.json'));
+const credentials = JSON.parse(fs.readFileSync('/etc/secrets/firebase-credentials.json'));
 
 admin.initializeApp({
     credential: admin.credential.cert(credentials)
