@@ -43,12 +43,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Google auth
+        uses: google-github-actions/auth@v2
+        with:
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}           
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          project_id: ${{ secrets.GCP_PROJECT_ID }}  
 
       - name: Deploy to Cloud Run
         run: |
