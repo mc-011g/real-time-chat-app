@@ -17,9 +17,16 @@ admin.initializeApp({
 const app = express();
 const server = createServer(app);
 
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://real-time-chat-app-4c9c5.web.app',
+    'https://real-time-chat-app-4c9c5.firebaseapp.com',
+];
+
 const io = new Server(server, {
     cors: {
-        origin: process.env.BASE_URL
+        origin: allowedOrigins,
+        credentials: true
     }
 });
 
@@ -43,11 +50,6 @@ async function connectToDB() {
     await client.connect();
     db = client.db(process.env.DB_NAME);
 }
-
-const allowedOrigins = [
-    'https://real-time-chat-app-4c9c5.web.app',
-    'https://real-time-chat-app-4c9c5.firebaseapp.com',
-];
 
 app.use(cors({
     origin: allowedOrigins,
