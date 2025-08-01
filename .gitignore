@@ -7,4 +7,5 @@ back-end/dist
 back-end/prod-env.yaml
 back-end/etc/secrets/firebase-credentials.json
 .env
+.env.production
 .firebase
