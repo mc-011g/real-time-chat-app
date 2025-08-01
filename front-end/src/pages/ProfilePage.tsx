@@ -125,7 +125,7 @@ export default function ProfilePage() {
         }
     }
 
-    const handleSendPasswordResetEmail = () => {
+    const handleSendPasswordResetEmail = () => {     
         if (userData && userData.email && auth) {
             try {
                 setIsSendingEmail(true);
@@ -163,42 +163,30 @@ export default function ProfilePage() {
             }
 
             <form className="flex flex-col gap-4 bg-white py-8 sm:py-16 px-16 sm:shadow-lg z-50 w-screen h-screen sm:w-fit sm:h-fit" onSubmit={e => { e.preventDefault(); handleSaveChange(); }}>
-
                 <Link to={"/"} className="flex sm:hidden flex-row gap-2 hover:cursor-pointer text-gray-900 w-full mb-8" >
-                    <ArrowUturnLeftIcon className="size-6 text-gray-600" />
-                    <span className="text-gray-600">Back</span>
+                    <ArrowUturnLeftIcon className="size-6 text-gray-600" />      
                 </Link>
 
-                <div className="flex flex-row items-center mb-6 relative">
-                    <Link to={"/"} className="hidden sm:flex flex-row gap-2 hover:cursor-pointer text-gray-900 w-33 absolute" >
-                        <ArrowUturnLeftIcon className="size-6 text-gray-600" />
-                        <span className="text-gray-600">Back</span>
-                    </Link>
-                    <h1 className="text-3xl text-center text-gray-900 text-center w-full">Profile</h1>
-                </div>
+                <div className="flex flex-row items-center relative justify-center relative">
+                    <Link to={"/"} className="absolute hidden sm:flex flex-row gap-2 hover:cursor-pointer text-gray-900 w-33 left-0 top-0 w-fit" >
+                        <ArrowUturnLeftIcon className="size-6 text-gray-600" />              
+                    </Link>               
 
-                <div className="flex gap-2 items-start flex-row justify-between flex-wrap">
-                    <div className="flex flex-row gap-2">
+                    <div className="flex flex-col gap-2 items-center text-center">
                         {userData &&
                             <UserImageContainer bgColor={userData.bgColor as string} firstName={userData.firstName} lastName={userData.lastName} size="large" />
                         }
-                        <label>
-                            <div className="text-gray-600">Profile Picture</div>
+                        <div className="text-gray-600 text-2xl">{userData.firstName} {userData.lastName}</div>                  
+                    </div>
+                </div>          
+
+                <div className="flex flex-col gap-4">
+                      <label>
+                            <div className="text-gray-600">Edit Picture</div>
                             <div className="w-25">
                                 <Input type={"file"} extraClasses="hover:cursor-not-allowed" disabled />
                             </div>
                         </label>
-                    </div>
-
-                    <div className="w-fit flex self-start">
-                        <Button variant="danger-outline" onClick={() => signOut(getAuth())} extraClasses="flex justify-center gap-2">
-                            <ArrowRightStartOnRectangleIcon className="size-6" />
-                            <span className="">Logout</span>
-                        </Button>
-                    </div>
-                </div>
-
-                <div className="flex flex-col">
                     <div className="flex flex-row flex-wrap gap-4">
                         <div className="w-fit h-fit">
                             <Button variant={"primary-outline"} type="button" disabled={isSendingEmail} onClick={() => handleSendPasswordResetEmail()}>
@@ -222,7 +210,7 @@ export default function ProfilePage() {
                         </div>
                     </div>
                     {message &&
-                        <div className="mt-2 text-green-600">{message}</div>
+                        <div className="text-green-600">{message}</div>
                     }
                 </div>
 
@@ -256,8 +244,15 @@ export default function ProfilePage() {
                 {error &&
                     <div className="text-red-600">{error}</div>
                 }
+
+                <div className="w-fit flex self-start mt-6">
+                    <Button variant="danger-outline" onClick={() => signOut(getAuth())} extraClasses="flex justify-center gap-2">
+                        <ArrowRightStartOnRectangleIcon className="size-6" />
+                        <span className="">Logout</span>
+                    </Button>
+                </div>
             </form>
-        </div >
+        </div>
     )
 }
 

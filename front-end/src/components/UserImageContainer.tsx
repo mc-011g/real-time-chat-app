@@ -20,7 +20,7 @@ export default function UserImageContainer({ firstName, lastName, bgColor, size 
             case "small":
                 return "w-12 h-12 min-w-12 min-h-12";
             case "large":
-                return "w-20 h-20 min-w-20 min-h-20 text-3xl";
+                return "w-30 h-30 min-w-20 min-h-20 text-3xl";
             default:
                 return "w-12 h-12 min-w-12 min-h-12";
         }
