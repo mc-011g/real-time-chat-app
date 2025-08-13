@@ -70,6 +70,7 @@ jobs:
         uses: cypress-io/github-action@v6.5.0
         with:     
           working-directory: ./front-end
+          config: baseUrl=http://localhost:5174
 
   build_and_deploy_frontend:
     runs-on: ubuntu-latest
