@@ -9,7 +9,12 @@ export default async function cleanUpTestData() {
 
     //Delete Firebase test users
     async function cleanFirebaseTestData() {
-        const credentials = JSON.parse(fs.readFileSync('./etc/secrets/firebase-credentials.json', 'utf8'));
+        const credentials = JSON.parse(process.env.FIREBASE_CREDENTIALS || '');
+
+        if (!credentials) {
+            console.log('Failed to clean up test data.');
+            return;
+        }
 
         admin.initializeApp({
             credential: admin.credential.cert(credentials)
@@ -20,7 +25,7 @@ export default async function cleanUpTestData() {
 
         for (const user of userList.users) {
             if (user.email && (user.email.includes("+test1") || user.email.includes("+test2"))) {
-                await auth.deleteUser(user.uid);      
+                await auth.deleteUser(user.uid);
             }
         }
     }
@@ -30,12 +35,12 @@ export default async function cleanUpTestData() {
     //Delete database test data
     async function cleanUpMongoDBTestData() {
         const ATLAS_URI = process.env.ATLAS_URI;
-        const DB_NAME = process.env.DB_NAME;   
+        const DB_NAME = process.env.DB_NAME;
 
         async function connectToDB() {
             const uri = !ATLAS_URI
                 ? 'mongodb://127.0.0.1:27017'
-                : ATLAS_URI;  
+                : ATLAS_URI;
 
             const client = new MongoClient(uri, {
                 serverApi: {

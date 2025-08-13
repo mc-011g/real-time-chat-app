@@ -22,19 +22,13 @@ jobs:
           cd front-end && npm install
           cd ../back-end && npm install
 
-      - name: Create /etc/secrets directory
-        run: cd back-end && mkdir -p ./etc/secrets
-
-      - name: Create firebase-credentials.json
-        run: |
-          cd back-end && printf '%s' "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > ./etc/secrets/firebase-credentials.json
-
       - name: Clean up test data
         run: |
           cd back-end && npx tsc && node src/cleanUpTestData.js
         env:
           ATLAS_URI: ${{ secrets.ATLAS_URI }}
           DB_NAME: ${{ secrets.TEST_DB_NAME }}
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}          
 
       - name: Run Vitest for unit/integration tests on the front-end
         run: |
