@@ -69,7 +69,6 @@ jobs:
       - name: Run Cypress E2E tests
         uses: cypress-io/github-action@v6.5.0
         with:
-          wait-on: "http://localhost:5174,http://localhost:8081"
           project: ./front-end
 
   build_and_deploy_frontend:
