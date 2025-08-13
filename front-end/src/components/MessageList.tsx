@@ -65,13 +65,13 @@ export default function MessageList({ setShowCreateGroupModal }: {
                                 <div className="text-gray-500 text-xs">{new Date(message.dateSent).toLocaleString([], { hour: 'numeric', minute: 'numeric' })}</div>
                             </div>
 
-                            {message.content}
+                            <div className="messageReceived" data-cy="messageReceived">{message.content}</div>
                         </div>
                     </div>
                 ) : (
                     <div key={message._id} className="p-4 rounded-xl bg-blue-500  self-end w-fit flex flex-col">
                         <div className="text-blue-400 text-xs">{new Date(message.dateSent).toLocaleTimeString([], { hour: 'numeric', minute: 'numeric' })}</div>
-                        <div className="text-gray-50">{message.content}</div>
+                        <div className="text-gray-50" data-cy="messageSent">{message.content}</div>
                     </div>
                 );
             }
@@ -85,7 +85,7 @@ export default function MessageList({ setShowCreateGroupModal }: {
                 <div className="w-full h-full text-black flex justify-center gap-4 flex-col items-center">
                     <div>Create or join a group.</div>
                     <div>
-                        <Button variant={"primary-solid"} extraClasses="flex flex-row items-center gap-2" onClick={() => setShowCreateGroupModal(true)}>
+                        <Button variant={"primary-solid"} extraClasses="flex flex-row items-center gap-2" onClick={() => setShowCreateGroupModal(true)} data-cy="noGroupsCreateButton">
                             <PlusIcon className="size-6 inline-flex" />
                             <div>Create a Group</div>
                         </Button>

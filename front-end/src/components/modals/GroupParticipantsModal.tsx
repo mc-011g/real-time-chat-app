@@ -88,12 +88,12 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
             <span className="font-bold text-gray-900">{participants?.length}</span>
             <span className="text-gray-600 ml-1">{participants && ((participants?.length > 1 || participants.length === 0)) ? 'Participants' : 'Participant'}</span>
           </div>
-          <div className="h-full overflow-scroll">
+          <div className="h-full overflow-scroll" data-cy="groupParticipantsList">
             <div className="flex flex-col">
               {participants && !isLoadingParticipants && participants.map(participant => (
-                <div key={participant._id} className="flex flex-row items-center gap-2 hover:bg-gray-100 rounded-xl p-2">
-                  <UserImageContainer firstName={participant.lastName} lastName={participant.firstName} bgColor={participant.bgColor as string} size={"small"} />
-                  <span className="text-gray-600">{participant.firstName} {participant.lastName}</span>
+                <div key={participant?._id} className="flex flex-row items-center gap-2 hover:bg-gray-100 rounded-xl p-2">
+                  <UserImageContainer firstName={participant?.lastName as string} lastName={participant?.firstName as string} bgColor={participant?.bgColor as string} size={"small"} />
+                  <span className="text-gray-600" data-cy="groupParticipantName">{participant?.firstName} {participant?.lastName}</span>
                 </div>
               ))}
               {isLoadingParticipants && (
@@ -105,7 +105,7 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
           </div>
 
           <Button variant={"primary-solid"} onClick={handleCreateInvitation}
-            disabled={isInvitationCreating}>
+            disabled={isInvitationCreating} data-cy="createInvitationButton">
             <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
               {isInvitationCreating &&
                 <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>
@@ -122,9 +122,9 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
         </>
         :
         <div className="flex flex-col gap-4">
-          <h1 className="font-bold">Invitation link created: </h1>
+          <h1 className="font-bold" data-cy="invitationCreatedMessage">Invitation link created: </h1>
           {invitationLink &&
-            <p>{invitationLink.url}</p>
+            <p data-cy="invitationLink">{invitationLink.url}</p>
           }
           <Button variant={"primary-solid"} onClick={() => setInvitationCreated(false)}>Go Back</Button>
         </div>

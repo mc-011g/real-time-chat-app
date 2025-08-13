@@ -27,30 +27,30 @@ export default function ChatHeader({ setShowSideBarToggle, showGroupParticipants
 
             <Bars3Icon className="flex sm:hidden size-6 text-gray-900 hover:cursor-pointer" onClick={() => setShowSideBarToggle(true)} />
 
-            <h1 className="text-2xl text-gray-900 overflow-hidden max-w-40 sm:max-w-full truncate">{selectedGroup ? (selectedGroup as GroupType).name : 'No Group'}</h1>
+            <h1 className="text-2xl text-gray-900 overflow-hidden max-w-40 sm:max-w-full truncate" data-cy="groupNameHeader">{selectedGroup ? (selectedGroup as GroupType).name : 'No Group'}</h1>
 
             {selectedGroup &&
                 <div className="flex flex-row gap-4 items-center">
                     <DropdownContainer>
                         <Tooltip position="bottom" text="Participants" >
-                            <button className="hover:cursor-pointer" onClick={() => showGroupParticipantsModal(true)}>
+                            <button className="hover:cursor-pointer" onClick={() => showGroupParticipantsModal(true)} data-cy="groupParticipantsButton">
                                 <UsersIcon className="w-6 h-6 text-gray-600 bg-white" />
                             </button>
                         </Tooltip>
                         {dropdown === "group-options" &&
                             <DropdownList dropdownSide={"left"} extraClasses="-left-14" dropDownRef={dropDownRef}>
-                                <DropdownItem onClick={() => { showChangeGroupNameModal(true); setDropdown(null); }}>
+                                <DropdownItem onClick={() => { showChangeGroupNameModal(true); setDropdown(null); }} data-cy="changeGroupNameOption">
                                     <PencilSquareIcon className="size-6" />
                                     Change group name
                                 </DropdownItem>
 
                                 {selectedGroup?.owner === user?._id ?
-                                    <DropdownItem extraClasses={"text-red-500"} onClick={() => { showDeleteGroupModal(true); setDropdown(null); }}>
+                                    <DropdownItem extraClasses={"text-red-500"} onClick={() => { showDeleteGroupModal(true); setDropdown(null); }} data-cy="deleteGroupOption">
                                         <TrashIcon className="size-6" />
                                         Delete group
                                     </DropdownItem>
                                     :
-                                    <DropdownItem extraClasses={"text-red-500"} onClick={() => { showLeaveGroupModal(true); setDropdown(null); }}>
+                                    <DropdownItem extraClasses={"text-red-500"} onClick={() => { showLeaveGroupModal(true); setDropdown(null); }} data-cy="leaveGroupOption">
                                         <ArrowLeftStartOnRectangleIcon className="size-6" />
                                         Leave group
                                     </DropdownItem>
@@ -59,8 +59,8 @@ export default function ChatHeader({ setShowSideBarToggle, showGroupParticipants
                         }
                     </DropdownContainer>
                     <Tooltip extraClasses="right-0.25" position={"bottom"} text={"Options"}>
-                        <button className="hover:cursor-pointer">
-                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-600" onClick={() => dropdown !== "group-options" ? setDropdown("group-options") : setDropdown(null)} />
+                        <button className="hover:cursor-pointer" onClick={() => dropdown !== "group-options" ? setDropdown("group-options") : setDropdown(null)} data-cy="groupOptionsDropdown" >
+                            <EllipsisHorizontalIcon className="w-6 h-6 text-gray-600" />
                         </button>
                     </Tooltip>
                 </div>

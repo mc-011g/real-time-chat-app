@@ -5,13 +5,15 @@ export default function ShowPasswordContainer({ children, showPassword, setShowP
     return (
         <div className="relative flex items-center justify-end text-gray-600">
             {children}
-            <div className="absolute z-10 bg-gray-200 px-4">
-                {showPassword ?
-                    <EyeIcon className="w-6 h-6 hover:cursor-pointer" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} />
-                    :
-                    <EyeSlashIcon className="w-6 h-6 hover:cursor-pointer" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} />
-                }
-            </div>
+            {showPassword ?
+                <button type="button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="togglePasswordTypePasswordButton">
+                    <EyeIcon className="w-6 h-6" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} />
+                </button>
+                :
+                <button type="button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="togglePasswordTypeTextButton">
+                    <EyeSlashIcon className="w-6 h-6" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} />
+                </button>
+            }
         </div>
     )
 }

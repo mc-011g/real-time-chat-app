@@ -70,12 +70,14 @@ export default function SendMessageBar() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyPress}
+            data-cy="sendMessageInput"
           />
-          <div className="absolute mr-2">
-            <PaperAirplaneIcon
-              className="w-6 h-6 mx-2 text-gray-600 hover:cursor-pointer"
-              onClick={handleSendMessage}
-            />
+          <div className="absolute mr-2 mx-2 items-center flex">
+            <button className="hover:cursor-pointer" onClick={handleSendMessage} data-cy="sendMessageButton">
+              <PaperAirplaneIcon
+                className="w-6 h-6 text-gray-600"
+              />
+            </button>
           </div>
         </div>
       )}

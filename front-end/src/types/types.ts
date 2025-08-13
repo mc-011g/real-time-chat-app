@@ -46,7 +46,7 @@ export interface GroupType {
     _id: string,
     name: string,
     owner: string,
-    byUserId: {
+    byUserId?: {
         [userId: string]: User
     },
     userIds: string[],

@@ -87,14 +87,14 @@ export default function ChatSideBar({ dropdown, setDropdown, dropDownRef, setSho
             <div className="flex flex-row items-center gap-2 px-4 py-4 border-b border-gray-300" onClick={() =>
                 (dropdown !== "profile" ? setDropdown("profile") : setDropdown(null))}>
                 <DropdownContainer>
-                    <UserImageContainer firstName={userData?.firstName as string} lastName={userData?.lastName as string} bgColor={userData?.bgColor as string} size={"small"} />
+                    <UserImageContainer firstName={userData?.firstName as string} lastName={userData?.lastName as string} bgColor={userData?.bgColor as string} size={"small"} data-cy="userProfileImage" />
                     {dropdown === "profile" &&
                         <DropdownList dropdownSide="right" dropDownRef={dropDownRef}>
-                            <DropdownItem onClick={() => navigate("/profile")}>
+                            <DropdownItem onClick={() => navigate("/profile")} data-cy="userProfileDropdownItem">
                                 <UserIcon className="size-6 inline-flex" />
                                 <span className="col-start-2">Profile</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => signOut(getAuth())}>
+                            <DropdownItem onClick={() => signOut(getAuth())} data-cy="logoutDropdownItem">
                                 <ArrowRightStartOnRectangleIcon className="size-6 inline-flex" />
                                 <span className="col-start-2">Logout</span>
                             </DropdownItem>
@@ -103,7 +103,7 @@ export default function ChatSideBar({ dropdown, setDropdown, dropDownRef, setSho
                 </DropdownContainer>
                 {userData &&
                     <>
-                        <span>{userData?.firstName + ' ' + userData?.lastName}</span>
+                        <span data-cy="userName">{userData?.firstName + ' ' + userData?.lastName}</span>
                     </>
                 }
             </div>
@@ -111,10 +111,12 @@ export default function ChatSideBar({ dropdown, setDropdown, dropDownRef, setSho
             <div className="px-4 flex-1 pt-4 flex flex-col overflow-y-hidden gap-2">
                 <div className="flex flex-row justify-between items-center mb-2">
                     <h1 className="text-2xl">Chats</h1>
-                    <PlusIcon className="size-6 hover:cursor-pointer" onClick={() => setShowCreateGroupModal(true)} />
+                    <button className="hover:cursor-pointer" onClick={() => setShowCreateGroupModal(true)} data-cy="createGroupButtonSideBar">
+                        <PlusIcon className="size-6" />
+                    </button>
                 </div>
                 <div className="relative flex justify-end items-center">
-                    <Input placeholder={"Search group"} type={"text"} value={searchGroupQuery} onChange={(e) => setSearchGroupQuery(e.target.value)} />
+                    <Input placeholder={"Search group"} type={"text"} value={searchGroupQuery} onChange={(e) => setSearchGroupQuery(e.target.value)} data-cy="searchGroupInput" />
                     <MagnifyingGlassIcon className="w-6 h-6 absolute text-gray-600 mr-2" />
                 </div>
                 <div className="flex h-full overflow-y-scroll">
@@ -122,7 +124,8 @@ export default function ChatSideBar({ dropdown, setDropdown, dropDownRef, setSho
                         {groupsList && !isGroupsLoading ?
                             <>
                                 {((filteredGroups && searchGroupQuery.length > 0) ? filteredGroups : groupsList).map(group =>
-                                    <div key={group._id} className={`${selectedGroup && selectedGroup._id === group._id && "bg-gray-200 hover:bg-gray-200"} flex flex-row items-center gap-2 hover:bg-gray-100 p-2 rounded-xl hover:cursor-pointer`} onClick={() => { handleSelectGroup(group._id as string); setShowSideBarToggle(false) }}>
+                                    <div key={group._id} className={`${selectedGroup && selectedGroup._id === group._id && "bg-gray-200 hover:bg-gray-200"} flex flex-row items-center gap-2 hover:bg-gray-100 p-2 rounded-xl hover:cursor-pointer`} onClick={() => { handleSelectGroup(group._id as string); setShowSideBarToggle(false) }}
+                                        data-cy="group">
                                         <GroupImageContainer />
                                         <span className="truncate max-w-full">{group.name}</span>
                                     </div>

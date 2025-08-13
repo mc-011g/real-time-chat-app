@@ -25,6 +25,7 @@ export default function ChatPage() {
 
     const [toast, setToast] = useState<ToastType | null>(null);
     const [dropdown, setDropdown] = useState<string | null>(null);
+
     const [showGroupParticipantsModal, setGroupParticipantsModal] = useState<boolean>(false);
     const [showCreateGroupModal, setShowCreateGroupModal] = useState<boolean>();
     const [showDeleteGroupModal, setDeleteGroupModal] = useState<boolean>(false);
@@ -135,7 +136,6 @@ export default function ChatPage() {
                 <LeaveGroupModal setShowModal={setLeaveGroupModal} setToast={setToast} setLeaveGroupModal={setLeaveGroupModal} />
             }
 
-
             {toast &&
                 <Toast closeToast={() => setToast(null)}>
                     <>
@@ -144,7 +144,7 @@ export default function ChatPage() {
                             :
                             <XMarkIcon className="size-6 text-red-600" />
                         }
-                        <span className="text-gray-900">{toast.message}</span>
+                        <span className="text-gray-900" data-cy="toastMessage">{toast.message}</span>
                     </>
                 </Toast>
             }

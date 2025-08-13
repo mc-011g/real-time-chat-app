@@ -9,7 +9,7 @@ export default function Modal({ title, children, setShowModal }: { title: string
 
                     <div className="flex flex-row justify-between items-center">
                         <h1 className="text-2xl">{title}</h1>
-                        <XMarkIcon className="w-6 h-6 text-gray-600 hover:cursor-pointer" onClick={() => setShowModal(false)} />
+                        <XMarkIcon className="w-6 h-6 text-gray-600 hover:cursor-pointer" onClick={() => setShowModal(false)} data-cy="modalCloseButton" />
                     </div>
 
                     <hr />

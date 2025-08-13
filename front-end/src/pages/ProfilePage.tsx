@@ -1,8 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
-import { ArrowRightStartOnRectangleIcon, ArrowUturnLeftIcon, CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeftIcon, ArrowRightStartOnRectangleIcon, CheckCircleIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { getAuth, sendPasswordResetEmail, signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 import { getUser } from "../redux/selectors";
@@ -18,6 +18,8 @@ import ChangeEmailModal from "../components/modals/ChangeEmailModal";
 export default function ProfilePage() {
 
     const userData = useSelector(getUser);
+    const navigate = useNavigate();
+
     const auth = getAuth();
 
     const [toast, setToast] = useState<ToastType | null>(null);
@@ -42,7 +44,6 @@ export default function ProfilePage() {
     const [initialFormData, setInitialFormData] = useState<InitialFormData | null>(null);
     const [initialFormDataChanged, setInitialFormDataChanged] = useState<boolean>(false);
 
-
     useEffect(() => {
         if (toast) {
             if (toastTimer.current) {
@@ -57,6 +58,36 @@ export default function ProfilePage() {
             startTimer();
         }
     }, [toast]);
+
+    useEffect(() => {
+        if (userData) {
+            setFirstName(userData.firstName);
+            setLastName(userData.lastName);
+
+            setInitialFormData({
+                email: userData.email as string,
+                firstName: userData.firstName,
+                lastName: userData.lastName
+            });
+        }
+    }, [userData]);
+
+
+    useEffect(() => {
+        if (initialFormData) {
+            if (firstName !== initialFormData.firstName ||
+                lastName !== initialFormData.lastName) {
+                setInitialFormDataChanged(true);
+            } else {
+                setInitialFormDataChanged(false);
+            }
+        }
+    }, [firstName, initialFormData, lastName]);
+
+    if (!userData) {
+        navigate('/login');
+        return null;
+    }
 
     const handleSaveChange = async () => {
         if (!firstName || !lastName) {
@@ -90,33 +121,8 @@ export default function ProfilePage() {
         } else {
             setError('Failed to update email. Please try again.');
         }
-
         setIsSavingProfile(false);
     }
-
-    useEffect(() => {
-        if (userData) {
-            setFirstName(userData.firstName);
-            setLastName(userData.lastName);
-
-            setInitialFormData({
-                email: userData.email as string,
-                firstName: userData.firstName,
-                lastName: userData.lastName
-            });
-        }
-    }, [userData]);
-
-    useEffect(() => {
-        if (initialFormData) {
-            if (firstName !== initialFormData.firstName ||
-                lastName !== initialFormData.lastName) {
-                setInitialFormDataChanged(true);
-            } else {
-                setInitialFormDataChanged(false);
-            }
-        }
-    }, [firstName, initialFormData, lastName]);
 
     const resetProfileData = () => {
         if (initialFormData) {
@@ -125,11 +131,16 @@ export default function ProfilePage() {
         }
     }
 
-    const handleSendPasswordResetEmail = () => {     
+    const handleSendPasswordResetEmail = () => {
         if (userData && userData.email && auth) {
             try {
                 setIsSendingEmail(true);
-                sendPasswordResetEmail(auth, userData.email);
+
+                //Will not send to test users
+                if (!(import.meta.env.MODE === "test" && userData.email && userData.email.includes("+test"))) {
+                    sendPasswordResetEmail(auth, userData.email);
+                }
+
                 setMessage('Password reset link sent successfully.');
             } catch (error) {
                 if (error instanceof Error) {
@@ -153,7 +164,7 @@ export default function ProfilePage() {
                             :
                             <XMarkIcon className="size-6 text-red-500" />
                         }
-                        <span className="text-gray-900">{toast.message}</span>
+                        <span className="text-gray-900" data-cy="toastMessage">{toast.message}</span>
                     </>
                 </Toast>
             }
@@ -163,33 +174,30 @@ export default function ProfilePage() {
             }
 
             <form className="flex flex-col gap-4 bg-white py-8 sm:py-16 px-16 sm:shadow-lg z-50 w-screen h-screen sm:w-fit sm:h-fit" onSubmit={e => { e.preventDefault(); handleSaveChange(); }}>
-                <Link to={"/"} className="flex sm:hidden flex-row gap-2 hover:cursor-pointer text-gray-900 w-full mb-8" >
-                    <ArrowUturnLeftIcon className="size-6 text-gray-600" />      
-                </Link>
 
                 <div className="flex flex-row items-center relative justify-center relative">
-                    <Link to={"/"} className="absolute hidden sm:flex flex-row gap-2 hover:cursor-pointer text-gray-900 w-33 left-0 top-0 w-fit" >
-                        <ArrowUturnLeftIcon className="size-6 text-gray-600" />              
-                    </Link>               
+                    <Link to={"/"} className="absolute hidden sm:flex flex-row gap-2 hover:cursor-pointer text-gray-900 w-33 left-0 top-0 w-fit" data-cy="profileBackButton">
+                        <ArrowLeftIcon className="size-6 text-gray-600" />
+                    </Link>
 
                     <div className="flex flex-col gap-2 items-center text-center">
                         {userData &&
                             <UserImageContainer bgColor={userData.bgColor as string} firstName={userData.firstName} lastName={userData.lastName} size="large" />
                         }
-                        <div className="text-gray-600 text-2xl">{userData.firstName} {userData.lastName}</div>                  
+                        <div className="text-gray-600 text-2xl">{userData.firstName} {userData.lastName}</div>
                     </div>
-                </div>          
+                </div>
 
                 <div className="flex flex-col gap-4">
-                      <label>
-                            <div className="text-gray-600">Edit Picture</div>
-                            <div className="w-25">
-                                <Input type={"file"} extraClasses="hover:cursor-not-allowed" disabled />
-                            </div>
-                        </label>
+                    <label>
+                        <div className="text-gray-600">Edit Picture</div>
+                        <div className="w-25">
+                            <Input type={"file"} extraClasses="hover:cursor-not-allowed" disabled />
+                        </div>
+                    </label>
                     <div className="flex flex-row flex-wrap gap-4">
                         <div className="w-fit h-fit">
-                            <Button variant={"primary-outline"} type="button" disabled={isSendingEmail} onClick={() => handleSendPasswordResetEmail()}>
+                            <Button variant={"primary-outline"} type="button" disabled={isSendingEmail} onClick={() => handleSendPasswordResetEmail()} data-cy="profileResetPasswordButton">
                                 <div className="flex flex-row gap-2 items-center justify-center place-items-center">
                                     {isSendingEmail &&
                                         <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>
@@ -199,7 +207,7 @@ export default function ProfilePage() {
                             </Button>
                         </div>
                         <div className="w-fit h-fit">
-                            <Button variant={"primary-outline"} type="button" disabled={isSendingEmail} onClick={() => setChangeEmailModal(true)}>
+                            <Button variant={"primary-outline"} type="button" disabled={isSendingEmail} onClick={() => setChangeEmailModal(true)} data-cy="profileUpdateEmailButton">
                                 <div className="flex flex-row gap-2 items-center justify-center place-items-center">
                                     {isSendingEmail &&
                                         <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>
@@ -210,25 +218,25 @@ export default function ProfilePage() {
                         </div>
                     </div>
                     {message &&
-                        <div className="text-green-600">{message}</div>
+                        <div className="text-green-600" data-cy="profileMessage">{message}</div>
                     }
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-2">
                     <label>
                         <span className="text-gray-600">First Name</span>
-                        <Input placeholder={"First Name"} type={"text"} value={firstName} onChange={(e) => (setFirstName(e.target.value))} minLength={2} required />
+                        <Input placeholder={"First Name"} type={"text"} value={firstName} onChange={(e) => (setFirstName(e.target.value))} minLength={2} required data-cy="profileFirstNameInput" />
                     </label>
                     <label>
                         <span className="text-gray-600">Last Name</span>
-                        <Input placeholder={"Last Name"} type={"text"} value={lastName} onChange={(e) => (setLastName(e.target.value))} minLength={2} required />
+                        <Input placeholder={"Last Name"} type={"text"} value={lastName} onChange={(e) => (setLastName(e.target.value))} minLength={2} required data-cy="profileLastNameInput" />
                     </label>
                 </div>
 
                 {initialFormDataChanged &&
                     <div className="flex flex-col gap-4 my-4">
                         <div className="flex flex-row gap-2">
-                            <Button variant={"primary-solid"} type="submit" disabled={isSavingProfile}>
+                            <Button variant={"primary-solid"} type="submit" disabled={isSavingProfile} data-cy="profileSaveChangesButton">
                                 <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
                                     {isSavingProfile &&
                                         <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>
@@ -236,7 +244,7 @@ export default function ProfilePage() {
                                     <div>Save Changes</div>
                                 </div>
                             </Button>
-                            <Button variant={"primary-outline"} type="button" onClick={() => resetProfileData()}>Reset</Button>
+                            <Button variant={"primary-outline"} type="button" onClick={() => resetProfileData()} data-cy="profileResetChangesButton">Reset</Button>
                         </div>
                     </div>
                 }
@@ -246,7 +254,7 @@ export default function ProfilePage() {
                 }
 
                 <div className="w-fit flex self-start mt-6">
-                    <Button variant="danger-outline" onClick={() => signOut(getAuth())} extraClasses="flex justify-center gap-2">
+                    <Button type="button" variant="danger-outline" onClick={() => { navigate('/'); signOut(getAuth()); }} extraClasses="flex justify-center gap-2" data-cy="profileLogoutButton">
                         <ArrowRightStartOnRectangleIcon className="size-6" />
                         <span className="">Logout</span>
                     </Button>
@@ -255,4 +263,3 @@ export default function ProfilePage() {
         </div>
     )
 }
-

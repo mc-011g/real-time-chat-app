@@ -1,8 +1,20 @@
+import dotenv from 'dotenv';
+
+if (process.env.NODE_ENV === "test") {
+    dotenv.config({ path: '.env.test' });
+} else {
+    dotenv.config();
+}
+
+const BASE_URL = process.env.BASE_URL;
+const DB_NAME = process.env.DB_NAME;
+const PORT = process.env.PORT || 8080;
+const ATLAS_URI = process.env.ATLAS_URI;
+
 import express from 'express';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import admin from 'firebase-admin';
 import fs from 'fs';
-import 'dotenv/config';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,6 +31,7 @@ const server = createServer(app);
 
 const allowedOrigins = [
     'http://localhost:5173',
+    'http://localhost:5174',
     'https://real-time-chat-app-4c9c5.web.app',
     'https://real-time-chat-app-4c9c5.firebaseapp.com',
 ];
@@ -35,9 +48,9 @@ app.use(express.json());
 let db;
 
 async function connectToDB() {
-    const uri = !process.env.ATLAS_URI
+    const uri = !ATLAS_URI
         ? 'mongodb://127.0.0.1:27017'
-        : process.env.ATLAS_URI;
+        : ATLAS_URI;
 
     const client = new MongoClient(uri, {
         serverApi: {
@@ -48,7 +61,7 @@ async function connectToDB() {
     });
 
     await client.connect();
-    db = client.db(process.env.DB_NAME);
+    db = client.db(DB_NAME);
 }
 
 app.use(cors({
@@ -85,12 +98,12 @@ app.post('/api/users/auth/register', async (req, res) => {
     }
 
     if (firstName.length < 2 || firstName.length > 50) {
-        res.status(400).json({ error: "First name must be between 1-50 characters." })
+        res.status(400).json({ error: "First name must be between 2-50 characters." })
         return;
     }
 
     if (lastName.length < 2 || lastName.length > 50) {
-        res.status(400).json({ error: "Last name must be between 1-50 characters." })
+        res.status(400).json({ error: "Last name must be between 2-50 characters." })
         return;
     }
 
@@ -127,12 +140,12 @@ app.use(async function (req, res, next) {
 
     if (authtoken) {
         try {
-            const user = await admin.auth().verifyIdToken(authtoken);
+            const user = await admin.auth().verifyIdToken(authtoken);        
 
-            if (!user.email_verified) {
+            if (!user.email_verified && !(process.env.NODE_ENV === "test" && user.email.includes("+test1"))) {
                 res.sendStatus(403);
                 return;
-            }
+            }    
 
             req.user = user;
             next();
@@ -147,25 +160,20 @@ app.use(async function (req, res, next) {
 
 //Socket.io connection handling
 io.on('connection', (socket) => {
-    console.log('A user connected!');
 
     socket.on('join-group', (groupId) => {
         socket.join(groupId);
-        console.log('User joined group: ' + groupId);
     });
 
-    socket.on('send-message', (message, groupId) => {
-        console.log('Send message, ' + message + ' to group: ' + groupId);
+    socket.on('send-message', (message, groupId) => { 
         io.to(groupId).emit('send-message', message);
     })
 
     socket.on('leave-group', (groupId) => {
         socket.leave(groupId);
-        console.log('User left group: ' + groupId);
     })
 
     socket.on('change-group-name', (newName, groupId) => {
-        console.log('Changed group!, ', newName, ' ', groupId);
         io.emit('change-group-name', newName, groupId);
     })
 
@@ -185,13 +193,12 @@ io.on('connection', (socket) => {
         io.emit('update-group-participant', user);
     })
 
-    socket.on('disconnect', () => {
-        console.log('User disconnected');
+    socket.on('disconnect', () => {    
     })
 });
 
 app.get('/api/user/profile', async (req, res) => {
-    const { uid } = req.user;
+    const { uid } = req.user;   
 
     try {
         const userDetails = await db.collection('users').findOne({ _id: uid });
@@ -207,7 +214,6 @@ app.get('/api/user/profile', async (req, res) => {
         res.sendStatus(500);
     }
 });
-
 
 app.put('/api/user/profile', async (req, res) => {
     const { uid } = req.user;
@@ -281,7 +287,7 @@ app.post('/api/chat/group/:id/create-invitation', async (req, res) => {
         }
 
         const newInviteLink = await db.collection('invitations').insertOne({
-            url: process.env.BASE_URL + '/join-group/' + inviteId,
+            url: BASE_URL + '/join-group/' + inviteId,
             groupId: groupId,
             valid: true,
             inviteId: inviteId.toString()
@@ -515,11 +521,6 @@ app.post('/api/chat/group/:id/send-message', async (req, res) => {
         return;
     }
 
-    if (newMessage.content.length < 1 || newMessage.content.length > 200) {
-        res.status(400).json({ error: "Message must be less than 200 characters." });
-        return;
-    }
-
     try {
         await db.collection('messages').insertOne(newMessage);
         res.json(newMessage);
@@ -625,6 +626,7 @@ app.put('/api/chat/group/:id', async (req, res) => {
     }
 });
 
+//User leaving a group
 app.put('/api/chat/group/:id/users', async (req, res) => {
     const { uid } = req.user;
     const { id: groupId } = req.params;
@@ -653,8 +655,6 @@ app.put('/api/chat/group/:id/users', async (req, res) => {
         res.sendStatus(404);
     }
 });
-
-const PORT = process.env.PORT || 8080;
 
 async function start() {
     await connectToDB();

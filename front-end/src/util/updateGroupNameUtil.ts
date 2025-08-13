@@ -11,7 +11,7 @@ export const updateGroupNameUtil = (user: User, name: string, groupId: string) =
     }
 
     try {
-        await axios.put(`${import.meta.env.VITE_API_URL}/api/chat/group/' + ${groupId}`, {
+        await axios.put(`${import.meta.env.VITE_API_URL}/api/chat/group/${groupId}`, {
             newName: name
         }, { headers });
 
@@ -23,6 +23,6 @@ export const updateGroupNameUtil = (user: User, name: string, groupId: string) =
         } else {
             return { success: false, error: "An unexpected error occurred." };
         }
-        
+
     }
 }

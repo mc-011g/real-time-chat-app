@@ -20,22 +20,23 @@ export default function LoginPage() {
 
     const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
     const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
+    const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
 
     const login = () => {
         setIsLoggingIn(true);
-        
+
         try {
             const firebaseSignIn = async () => {
                 await signInWithEmailAndPassword(getAuth(), email, password).then((userCredential) => {
                     const user = userCredential.user;
 
-                    if (!user.emailVerified) {
+                    if (!user.emailVerified && !(import.meta.env.MODE === "test" && user.email && user.email.includes("+test1"))) {
                         navigate("/please-verify-email");
                         return;
-                    } 
+                    }
 
-                    setLoginSuccess(true);            
-           
+                    setLoginSuccess(true);
+
                 }).catch((error) => {
                     const errorCode = error.code;
 
@@ -56,36 +57,46 @@ export default function LoginPage() {
 
         } catch (error) {
             setError(String(error));
-        } 
+            setIsLoggingIn(false);
+        }
     }
 
     useEffect(() => {
-        if (userData && loginSuccess && user && user.emailVerified) {
+        if (userData && loginSuccess && user) {
             navigate("/");
             setIsLoggingIn(false);
             setLoginSuccess(false);
         }
     }, [loginSuccess, navigate, user, userData]);
 
+    useEffect(() => {
+        if (email) {
+            setIsEmailValid(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+        }
+    }, [email]);
+
     return (
-        <div className="flex justify-center place-items-center h-[100vh] sm:bg-gray-50">
+        <div className="flex justify-center place-items-center min-h-screen sm:bg-gray-50">
 
             <form className="flex flex-col gap-4 bg-white py-16 px-8 sm:shadow-lg" onSubmit={(e) => { e.preventDefault(); login(); }}>
                 <h1 className="text-3xl text-center mb-4 text-gray-900">Login</h1>
 
                 <label>
                     <span className="text-gray-600">Email</span>
-                    <Input required placeholder={"Email Address"} type={"email"} value={email} onChange={(e) => (setEmail(e.target.value))}></Input>
+                    <Input required placeholder={"Email Address"} type={"email"} value={email} onChange={(e) => (setEmail(e.target.value))} data-cy="emailInput"></Input>
+                    {email && !isEmailValid &&
+                        <div className="text-red-600" data-cy="invalidEmailMessage">Please enter a valid email address.</div>
+                    }
                 </label>
 
                 <label>
                     <span className="text-gray-600">Password</span>
                     <ShowPasswordContainer showPassword={showPassword} setShowPassword={setShowPassword}>
-                        <Input required placeholder={"Password"} type={showPassword ? "text" : "password"} value={password} onChange={(e) => (setPassword(e.target.value))} ></Input>
+                        <Input required placeholder={"Password"} type={showPassword ? "text" : "password"} value={password} onChange={(e) => (setPassword(e.target.value))} data-cy="passwordInput"></Input>
                     </ShowPasswordContainer>
                 </label>
 
-                <Button type="submit" variant={"primary-solid"} disabled={isLoggingIn}>
+                <Button type="submit" variant={"primary-solid"} disabled={isLoggingIn || !isEmailValid || !password} data-cy="loginButton">
                     <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
                         {isLoggingIn &&
                             <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>
@@ -95,7 +106,7 @@ export default function LoginPage() {
                 </Button>
 
                 {error &&
-                    <p className="text-red-800">{error}</p>
+                    <p className="text-red-800" data-cy="errorMessage">{error}</p>
                 }
 
                 <p className="text-gray-600 m-0">Don't have an account yet? <span className="text-gray-900 font-bold hover:cursor-pointer">
@@ -103,7 +114,7 @@ export default function LoginPage() {
                 </span>
                 </p>
 
-                <Link to="/forgot-password" className="text-gray-600">Forgot password?</Link>
+                <Link to="/forgot-password" className="text-gray-600" data-cy="forgotPasswordLink">Forgot password?</Link>
             </form>
         </div>
     )

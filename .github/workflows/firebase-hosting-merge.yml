@@ -7,6 +7,56 @@ on:
     branches:
       - nodejs-backend
 jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: |
+          cd front-end && npm install
+          cd ../back-end && npm install
+
+      - name: Clean up test data
+        run: |
+          cd back-end && npx tsc && node src/cleanUpTestData.js
+        env:
+          ATLAS_URI: ${{ secrets.ATLAS_URI }}
+          DB_NAME: ${{ secrets.TEST_DB_NAME }}
+
+      - name: Run Vitest for unit/integration tests on the front-end
+        run: |
+          cd front-end && npx vitest run
+          echo "VITE_ATLAS_URI=${{ secrets.VITE_ATLAS_URI }}" >> .env
+          echo "VITE_DB_NAME=${{ secrets.TEST_DB_NAME }}" >> .env
+          echo "VITE_API_URL=${{ secrets.TEST_API_URL }}" >> .env
+          echo "VITE_SOCKET_IO_URL=${{ secrets.TEST_SOCKET_IO_URL }}" >> .env
+          echo "VITE_FIREBASE_API_KEY=${{ secrets.VITE_FIREBASE_API_KEY }}" >> .env
+          echo "VITE_FIREBASE_AUTH_DOMAIN=${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}" >> .env
+          echo "VITE_FIREBASE_PROJECT_ID=${{ secrets.VITE_FIREBASE_PROJECT_ID }}" >> .env
+          echo "VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}" >> .env
+          echo "VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}" >> .env
+          echo "VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID }}" >> .env
+
+      - name: Run back-end in test mode
+        run: cd back-end && npm run dev:test &
+      
+      - name: Change directory to front-end for Cypress tests
+        run: cd front-end
+
+      - name: Run Cypress E2E tests
+        uses: cypress-io/github-action@v6.5.0
+        with:
+          build: npm run build
+          start: npm run dev:test
+          wait-on: "http://localhost:5174,http://localhost:8081"
+          project: ./front-end
+
   build_and_deploy_frontend:
     runs-on: ubuntu-latest
     steps:
@@ -23,11 +73,13 @@ jobs:
           echo "VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}" >> front-end/.env
           echo "VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}" >> front-end/.env
           echo "VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID }}" >> front-end/.env
+          
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
+          
       - name: Install dependencies and build frontend
         run: cd front-end && npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -36,14 +88,14 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_REAL_TIME_CHAT_APP_4C9C5 }}
           channelId: live
           projectId: real-time-chat-app-4c9c5
-  
+
   build_and_deploy_backend:
     runs-on: ubuntu-latest
     needs: build_and_deploy_frontend
     permissions:
-      contents: 'read'
-      id-token: 'write'
-      
+      contents: "read"
+      id-token: "write"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -51,12 +103,12 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}           
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}  
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Deploy to Cloud Run
         run: |

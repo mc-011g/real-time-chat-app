@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { GroupsType, GroupType, User } from "../../types/types"
 
-const initialState: { value: GroupsType } = {
+export const initialState: { value: GroupsType } = {
     value: {
         byGroupId: {},
         selectedGroupId: null,
@@ -33,9 +33,11 @@ export const groupsSliceDef = {
         setSelectedGroupParticipants: (state: { value: GroupsType }, action: { payload: { users: User[], groupId: string } }) => {
             const { users, groupId } = action.payload;
 
-            if (state.value.ids.includes(groupId)) {
+            if (state.value.ids.includes(groupId) && state.value.byGroupId[groupId]) {
                 users.forEach(user => {
-                    state.value.byGroupId[groupId].byUserId[user._id] = user;
+                    if (state.value.byGroupId[groupId]?.byUserId) {
+                        state.value.byGroupId[groupId].byUserId[user._id] = user;
+                    }
                 });
             }
         },
@@ -49,8 +51,10 @@ export const groupsSliceDef = {
 
             groupIds.forEach(groupId => {
                 if (state.value.ids.includes(groupId) && state.value.byGroupId[groupId].userIds.includes(participant._id)) {
-                    const userState = state.value.byGroupId[groupId].byUserId[participant._id];
-                    state.value.byGroupId[groupId].byUserId[participant._id] = { ...userState, ...participant };
+                    if (state.value.byGroupId[groupId]?.byUserId) {
+                        const userState = state.value.byGroupId[groupId].byUserId[participant._id];
+                        state.value.byGroupId[groupId].byUserId[participant._id] = { ...userState, ...participant };
+                    }
                 }
             });
         },
@@ -94,7 +98,9 @@ export const groupsSliceDef = {
             if (group) {
                 if (!group.userIds.includes(userId)) {
                     group.userIds.push(userId);
-                    group.byUserId[userId] = user;
+                    if (group?.byUserId) {
+                        group.byUserId[userId] = user;
+                    }
                 }
             }
         },
@@ -106,7 +112,7 @@ export const groupsSliceDef = {
                 if (group.userIds.includes(userId)) {
                     group.userIds = group.userIds.filter(existingUserId => existingUserId !== userId);
 
-                    if (group.byUserId[userId]) {
+                    if (group.byUserId && group.byUserId[userId]) {
                         delete group.byUserId[userId];
                     }
                 }

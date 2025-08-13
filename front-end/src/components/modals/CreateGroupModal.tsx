@@ -44,12 +44,11 @@ export default function CreateGroupModal({ setShowModal, setToast, setShowCreate
             <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleCreateNewGroup(); }}>
                 <label>
                     <span className="text-gray-600">Group Name</span>
-                    <Input placeholder={"Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required />
+                    <Input placeholder={"Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required data-cy="createGroupInput" />
                 </label>
 
                 <Button variant={"primary-solid"} type="submit"
-                    disabled={!name || isCreatingGroup}
-                >
+                    disabled={!name || isCreatingGroup} data-cy="createGroupSubmitButton">
                     <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
                         {isCreatingGroup &&
                             <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>

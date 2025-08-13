@@ -55,15 +55,15 @@ export default function ChangeRoomNameModal({ setToast, setShowModal, setChangeG
 
     return (
         <Modal title={"Change Group Name"} setShowModal={() => setShowModal(false)}>
-            <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleSubmit(); }}>
+            <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleSubmit(); }} data-cy="changeGroupNameForm">
 
                 <label>
                     <span className="text-gray-600">New Group Name</span>
-                    <Input placeholder={"New Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required />
+                    <Input placeholder={"New Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required data-cy="changeGroupNameInput" />
                 </label>
 
                 <Button variant={"primary-solid"} type="submit"
-                    disabled={!name || isSavingGroup}
+                    disabled={!name || isSavingGroup} data-cy="changeGroupNameSaveButton"
                 >
                     <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
                         {isSavingGroup &&

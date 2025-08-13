@@ -1,4 +1,4 @@
-export default function UserImageContainer({ firstName, lastName, bgColor, size }: { firstName: string, lastName: string, bgColor: string, size: string }) {
+export default function UserImageContainer({ firstName, lastName, bgColor, size, ...props }: React.HTMLAttributes<HTMLDivElement> & { firstName: string, lastName: string, bgColor: string, size: string }) {
 
     const backgroundColorSelector = () => {
         switch (bgColor) {
@@ -33,7 +33,7 @@ export default function UserImageContainer({ firstName, lastName, bgColor, size 
     }
 
     return (
-        <div className={`${backgroundColorSelector()} ${sizeSelector()} rounded-[100%] text-white flex items-center justify-center hover:cursor-pointer`}>
+        <div {...props} className={`${backgroundColorSelector()} ${sizeSelector()} rounded-[100%] text-white flex items-center justify-center hover:cursor-pointer`}>
             <span className="flex">{getUserInitials()}</span>
         </div>
     )

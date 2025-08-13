@@ -8,4 +8,6 @@ back-end/prod-env.yaml
 back-end/etc/secrets/firebase-credentials.json
 .env
 .env.production
+.env.test
 .firebase
+back-end/src/cleanUpTestData.js

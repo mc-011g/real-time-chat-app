@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { MessagesType, MessageType } from "../../types/types"
 import { socket } from "../../socket";
 
-const initialState: { value: MessagesType } = {
+export const initialState: { value: MessagesType } = {
     value: {
         byGroupId: {},
         loading: false

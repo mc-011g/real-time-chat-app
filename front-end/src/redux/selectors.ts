@@ -14,7 +14,17 @@ export const getGroup = (groupId: string) => createSelector(groupsState, groups 
 
 export const getGroupMessages = (groupId: string) => createSelector(messagesState, messages => messages.byGroupId[groupId]);
 
-export const getGroupParticipants = (groupId: string) => createSelector(groupsState, groups => groups.byGroupId[groupId].userIds.map(userId => groups.byGroupId[groupId].byUserId[userId]).filter(Boolean));
+export const getGroupParticipants = (groupId: string) => createSelector(groupsState, groups => {
+    const group = groups.byGroupId[groupId];
+
+    if (!group || !group.userIds) {
+        return [];
+    }
+
+    return group.userIds.map(userId => group.byUserId?.[userId]).filter(Boolean);
+}
+
+);
 
 export const getIsGroupsLoading = (state: { groups: { value: GroupsType } }) => state.groups.value.loading;
 

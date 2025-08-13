@@ -48,9 +48,9 @@ export default function DeleteGroupModal({ setShowModal, setDeleteGroupModal, se
 
     return (
         <Modal title={"Delete Group"} setShowModal={() => setShowModal(false)}>
-            <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleDeleteGroup(); }}>
+            <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleDeleteGroup(); }} data-cy="deleteGroupForm">
                 <p className="text-gray-600">Are you sure you want to delete this group?</p>
-                <Button variant={"danger-solid"} type="submit" disabled={isDeletingGroup}>
+                <Button variant={"danger-solid"} type="submit" disabled={isDeletingGroup} data-cy="deleteGroupButton">
                     <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
                         {isDeletingGroup &&
                             <div className="border-red-400 border-t-red-50 w-4 h-4 border-2 rounded-full animate-spin"></div>

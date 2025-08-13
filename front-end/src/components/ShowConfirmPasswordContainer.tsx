@@ -6,9 +6,13 @@ export default function ShowConfirmPasswordContainer({ children, showConfirmPass
         <div className="relative flex items-center justify-end text-gray-600">
             {children}
             {showConfirmPassword ?
-                <EyeIcon className="w-6 h-6 absolute mr-4 z-10 hover:cursor-pointer" onClick={(e) => { e.preventDefault(); setShowConfirmPassword(!showConfirmPassword); }} />
+                <button type="button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="toggleConfirmPasswordTypePasswordButton">
+                    <EyeIcon className="w-6 h-6" onClick={(e) => { e.preventDefault(); setShowConfirmPassword(!showConfirmPassword); }} />
+                </button>
                 :
-                <EyeSlashIcon className="w-6 h-6 absolute mr-4 z-10 hover:cursor-pointer" onClick={(e) => { e.preventDefault(); setShowConfirmPassword(!showConfirmPassword); }} />
+                <button type="button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="toggleConfirmPasswordTypeTextButton">
+                    <EyeSlashIcon className="w-6 h-6" onClick={(e) => { e.preventDefault(); setShowConfirmPassword(!showConfirmPassword); }} />
+                </button>
             }
         </div>
     )

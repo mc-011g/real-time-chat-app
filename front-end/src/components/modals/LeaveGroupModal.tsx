@@ -50,9 +50,11 @@ export default function LeaveGroupModal({ setShowModal, setToast, setLeaveGroupM
 
     return (
         <Modal title={"Leave Group"} setShowModal={() => setShowModal(false)}>
-            <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleLeaveGroup(); }}>
+            <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleLeaveGroup(); }} data-cy="leaveGroupModalForm">
                 <p className="text-gray-600">Are you sure you want to leave this group?</p>
-                <Button variant={"primary-solid"} type="submit">Leave</Button>
+                <Button variant={"primary-solid"} type="submit" data-cy="leaveGroupButton">
+                    Leave
+                </Button>
             </form>
         </Modal>
     )
