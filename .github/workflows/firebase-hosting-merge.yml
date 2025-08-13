@@ -27,7 +27,7 @@ jobs:
 
       - name: Create firebase-credentials.json
         run: |
-          echo "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > ./etc/secrets/firebase-credentials.json
+          cd back-end && echo "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > ./etc/secrets/firebase-credentials.json
 
       - name: Clean up test data
         run: |
