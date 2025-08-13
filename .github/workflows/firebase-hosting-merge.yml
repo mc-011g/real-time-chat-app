@@ -50,6 +50,7 @@ jobs:
           ATLAS_URI: ${{ secrets.ATLAS_URI }}
           DB_NAME: ${{ secrets.TEST_DB_NAME }}
           FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+          PORT: 8081        
 
       - name: Change directory and run the front-end for Cypress tests
         run: cd front-end && npm run dev:test &
