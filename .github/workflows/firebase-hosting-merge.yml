@@ -22,6 +22,10 @@ jobs:
           cd front-end && npm install
           cd ../back-end && npm install
 
+      - name: Create firebase-credentials.json
+        run: |
+          echo "${{ secrets.FIREBASE_CREDENTIALS_JSON }}" > ./etc/secrets/firebase-credentials.json
+
       - name: Clean up test data
         run: |
           cd back-end && npx tsc && node src/cleanUpTestData.js
