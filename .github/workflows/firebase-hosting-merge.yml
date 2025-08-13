@@ -23,7 +23,7 @@ jobs:
           cd ../back-end && npm install
 
       - name: Create /etc/secrets directory
-        run: mkdir -p ./etc/secrets
+        run: cd back-end && mkdir -p ./etc/secrets
 
       - name: Create firebase-credentials.json
         run: |
