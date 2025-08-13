@@ -1,9 +1,13 @@
 import dotenv from 'dotenv';
 
+let credentials;
+
 if (process.env.NODE_ENV === "test") {
     dotenv.config({ path: '.env.test' });
+    credentials = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 } else {
     dotenv.config();
+    credentials = JSON.parse(fs.readFileSync('./etc/secrets/firebase-credentials.json'));
 }
 
 const BASE_URL = process.env.BASE_URL;
@@ -19,8 +23,6 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
-
-const credentials = JSON.parse(fs.readFileSync('./etc/secrets/firebase-credentials.json'));
 
 admin.initializeApp({
     credential: admin.credential.cert(credentials)
@@ -140,12 +142,12 @@ app.use(async function (req, res, next) {
 
     if (authtoken) {
         try {
-            const user = await admin.auth().verifyIdToken(authtoken);        
+            const user = await admin.auth().verifyIdToken(authtoken);
 
             if (!user.email_verified && !(process.env.NODE_ENV === "test" && user.email.includes("+test1"))) {
                 res.sendStatus(403);
                 return;
-            }    
+            }
 
             req.user = user;
             next();
@@ -165,7 +167,7 @@ io.on('connection', (socket) => {
         socket.join(groupId);
     });
 
-    socket.on('send-message', (message, groupId) => { 
+    socket.on('send-message', (message, groupId) => {
         io.to(groupId).emit('send-message', message);
     })
 
@@ -193,12 +195,12 @@ io.on('connection', (socket) => {
         io.emit('update-group-participant', user);
     })
 
-    socket.on('disconnect', () => {    
+    socket.on('disconnect', () => {
     })
 });
 
 app.get('/api/user/profile', async (req, res) => {
-    const { uid } = req.user;   
+    const { uid } = req.user;
 
     try {
         const userDetails = await db.collection('users').findOne({ _id: uid });
