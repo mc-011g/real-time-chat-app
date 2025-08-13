@@ -28,7 +28,7 @@ jobs:
         env:
           ATLAS_URI: ${{ secrets.ATLAS_URI }}
           DB_NAME: ${{ secrets.TEST_DB_NAME }}
-          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}          
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
 
       - name: Run Vitest for unit/integration tests on the front-end
         run: |
@@ -46,7 +46,11 @@ jobs:
 
       - name: Run back-end in test mode
         run: cd back-end && npm run dev:test &
-      
+        env:
+          ATLAS_URI: ${{ secrets.ATLAS_URI }}
+          DB_NAME: ${{ secrets.TEST_DB_NAME }}
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+
       - name: Change directory to front-end for Cypress tests
         run: cd front-end
 
@@ -74,13 +78,13 @@ jobs:
           echo "VITE_FIREBASE_STORAGE_BUCKET=${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}" >> front-end/.env
           echo "VITE_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}" >> front-end/.env
           echo "VITE_FIREBASE_APP_ID=${{ secrets.VITE_FIREBASE_APP_ID }}" >> front-end/.env
-          
+
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
-          
+
       - name: Install dependencies and build frontend
         run: cd front-end && npm install && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
