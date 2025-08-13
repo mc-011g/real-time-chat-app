@@ -51,14 +51,23 @@ jobs:
           DB_NAME: ${{ secrets.TEST_DB_NAME }}
           FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
 
-      - name: Change directory to front-end for Cypress tests
-        run: cd front-end
+      - name: Change directory and run the front-end for Cypress tests
+        run: cd front-end && npm run dev:test &
+        env:
+          VITE_ATLAS_URI: ${{ secrets.VITE_ATLAS_URI }}
+          VITE_DB_NAME: ${{ secrets.TEST_DB_NAME }}
+          VITE_API_URL: ${{ secrets.TEST_API_URL }}
+          VITE_SOCKET_IO_URL: ${{ secrets.TEST_SOCKET_IO_URL }}
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
 
       - name: Run Cypress E2E tests
         uses: cypress-io/github-action@v6.5.0
         with:
-          build: cd front-end && npm run build
-          start: cd front-end && npm run dev:test
           wait-on: "http://localhost:5174,http://localhost:8081"
           project: ./front-end
 
