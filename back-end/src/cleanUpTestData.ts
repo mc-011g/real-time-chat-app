@@ -63,6 +63,6 @@ export default async function cleanUpTestData() {
 }
 
 cleanUpTestData().then(() => process.exit(0)).catch(error => {
-    console.error('Clean up script error.');
+    console.error('Clean up script error: ', error);
     process.exit(1);
 });
