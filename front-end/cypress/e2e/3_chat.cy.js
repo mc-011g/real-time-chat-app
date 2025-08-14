@@ -98,8 +98,11 @@ describe('Chat page functionality', () => {
     cy.get('@invitationLink').then((invitationLink) => {
       cy.visit(invitationLink.trim());
     });
+    
 
-    cy.get('[data-cy="joinGroupButton"]').click();
+    cy.get('[data-cy="joinGroupText"]').should('be.visible').invoke('text').should('eq', 'You have been invited to join a group.');
+
+    cy.get('[data-cy="joinGroupButton"]').should('be.visible').click();
 
     cy.get('[data-cy="messageReceived"]').eq(0).invoke('text').should('eq', 'Test message 1, group A');
     cy.get('[data-cy="messageReceived"]').eq(1).invoke('text').should('eq', 'Test message 2, group A');

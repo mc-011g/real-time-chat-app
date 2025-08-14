@@ -50,7 +50,7 @@ export default function JoinGroupPage() {
     return (
         <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-50">
             <div className="bg-white p-16 flex flex-col gap-4 rounded-xl shadow-xl items-center">
-                <h1 className="text-3xl text-gray-900 ">You have been invited to join a group.</h1>
+                <h1 className="text-3xl text-gray-900" data-cy="joinGroupText">You have been invited to join a group.</h1>
                 <Button variant={"primary-solid"} onClick={handleJoinGroup} disabled={isJoiningGroup} data-cy="joinGroupButton">
                     Join
                 </Button>
