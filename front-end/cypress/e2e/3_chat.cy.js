@@ -98,7 +98,8 @@ describe('Chat page functionality', () => {
     cy.get('@invitationLink').then((invitationLink) => {
       cy.visit(invitationLink.trim());
     });
-    
+
+    cy.location("pathname").should("include", "/join-group");
 
     cy.get('[data-cy="joinGroupText"]').should('be.visible').invoke('text').should('eq', 'You have been invited to join a group.');
 
@@ -159,6 +160,8 @@ describe('Chat page functionality', () => {
     cy.get("[data-cy='passwordInput']").type("jdY32ncA(");
     cy.get("[data-cy='loginButton']").click();
 
+    cy.location("pathname").should("equal", "/");
+
     cy.get('[data-cy="group"]').eq(0).as('group').should('exist').invoke('text').should('eq', 'Group C');
     cy.get('@group').click();
     cy.get("[data-cy='groupOptionsDropdown']").click();
@@ -186,5 +189,4 @@ describe('Chat page functionality', () => {
     cy.get('[data-cy="groupParticipantName"]').eq(1).should('not.exist');
     cy.get('[data-cy="modalCloseButton"]').click();
   });
-
 });
