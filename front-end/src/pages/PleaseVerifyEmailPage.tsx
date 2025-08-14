@@ -14,7 +14,6 @@ export default function PleaseVerifyEmailPage() {
 
     const handleResendVerificationEmail = () => {
         if (user) {
-
             //Allow only real users to get the verification email
             if (!user.emailVerified && !(import.meta.env.MODE === "test" && user.email && user.email.includes("+test"))) {
                 sendEmailVerification(user);
@@ -22,14 +21,21 @@ export default function PleaseVerifyEmailPage() {
 
             setSentEmail(true);
             signOut(getAuth());
+        } 
+    }
+
+    const handleBackButtonAction = () => {
+        if (user && !user.emailVerified) {    
+            signOut(getAuth());
         }
+        navigate('/login');
     }
 
     return (
         <div className="flex justify-center place-items-center h-[100vh] sm:bg-gray-50">
 
             <div className="flex relative flex-col items-center text-gray-800 gap-4 bg-white py-16 px-8 sm:shadow-lg">
-                <div className="absolute top-8 left-8 flex flex-row gap-2 items-center cursor-pointer" onClick={() => navigate('/login')} data-cy="backToLoginButton">
+                <div className="absolute top-8 left-8 flex flex-row gap-2 items-center cursor-pointer" onClick={handleBackButtonAction} data-cy="backToLoginButton">
                     <ArrowLeftIcon className="w-6 h-6" />
                 </div>
 

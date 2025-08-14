@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe('Chat page functionality', () => {
 
   before(() => {
@@ -89,10 +91,14 @@ describe('Chat page functionality', () => {
     cy.get("[data-cy='registerButton']").click();
 
     cy.get("[data-cy='backToLoginButton']").click();
+    
+    cy.location("pathname").should("equal", "/login");
 
     cy.get("[data-cy='emailInput']").type("test+test1111@gmail.com");
     cy.get("[data-cy='passwordInput']").type("jdY32ncA(");
-    cy.get("[data-cy='loginButton']").click();
+    cy.get("[data-cy='loginButton']").should('not.be.disabled').click();
+
+    cy.location("pathname").should("equal", "/");
 
     // Navigate to the invite link
     cy.get('@invitationLink').then((invitationLink) => {
