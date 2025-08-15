@@ -51,6 +51,7 @@ jobs:
           DB_NAME: ${{ secrets.TEST_DB_NAME }}
           FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
           PORT: 8081      
+          BASE_URL: http://localhost:5174
 
       - name: Run Cypress E2E tests
         uses: cypress-io/github-action@v6.5.0

@@ -71,7 +71,8 @@ describe('Chat page functionality', () => {
 
     cy.get('[data-cy="createInvitationButton"]').click();
     cy.get('[data-cy="invitationCreatedMessage"]').invoke('text').should('eq', 'Invitation link created: ');
-    cy.get('[data-cy="invitationLink"]').should('be.visible').invoke('text').as('invitationLink');
+
+    cy.get('[data-cy="invitationLink"]', { timeout: 30000 }).should('be.visible').invoke('text').should('not.be.empty').should('include', '/join-group/').as('invitationLink');
 
     cy.get('[data-cy="modalCloseButton"]').click();
 
@@ -102,6 +103,11 @@ describe('Chat page functionality', () => {
 
     // Navigate to the invite link
     cy.get('@invitationLink').then((invitationLink) => {
+      cy.log('Invitation link: ', invitationLink);
+
+      expect(invitationLink).to.not.include('undefined');
+      expect(invitationLink).to.include('/join-group');
+
       cy.visit(invitationLink.trim());
     });
 
