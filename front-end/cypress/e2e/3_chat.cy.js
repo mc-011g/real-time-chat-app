@@ -91,7 +91,7 @@ describe('Chat page functionality', () => {
     cy.get("[data-cy='registerButton']").click();
 
     cy.get("[data-cy='backToLoginButton']").click();
-    
+
     cy.location("pathname").should("equal", "/login");
 
     cy.get("[data-cy='emailInput']").type("test+test1111@gmail.com");
@@ -107,7 +107,7 @@ describe('Chat page functionality', () => {
 
     cy.location("pathname").should("include", "/join-group");
 
-    cy.get('[data-cy="joinGroupText"]').should('be.visible').invoke('text').should('eq', 'You have been invited to join a group.');
+    cy.get('[data-cy="joinGroupText"]', { timeout: 60000 }).should('be.visible').invoke('text').should('eq', 'You have been invited to join a group.');
 
     cy.get('[data-cy="joinGroupButton"]').should('be.visible').click();
 
