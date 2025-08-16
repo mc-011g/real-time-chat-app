@@ -112,7 +112,7 @@ app.post('/api/users/auth/register', async (req, res) => {
     try {
         const existingUser = await db.collection('users').findOne({ email: email });
         if (existingUser) {
-            res.status(400).json({ error: "A user exists with this email already. " });
+            res.status(400).json({ error: "A user exists with this email already." });
             return;
         }
 

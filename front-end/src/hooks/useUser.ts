@@ -7,10 +7,14 @@ import { logoutUser } from "../redux/slices/userSlice";
 import { clearMessages } from "../redux/slices/messagesSlice";
 import { clearGroups } from "../redux/slices/groupsSlice";
 import { socket } from "../socket";
+import { useSelector } from "react-redux";
+import { getUser } from "../redux/selectors";
 
 export default function useUser() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [user, setUser] = useState<User | null>(null);
+
+    const userData = useSelector(getUser);
 
     const dispatch = useAppDispatch();
 
@@ -21,7 +25,9 @@ export default function useUser() {
             if (user) {
                 socket.connect();
                 const initializeUserState = async () => {
-                    await dispatch(loginThunk(user));
+                    if (!userData || userData._id !== user.uid) {        
+                        await dispatch(loginThunk(user));
+                    }
                 }
                 initializeUserState();
             } else {
@@ -35,7 +41,7 @@ export default function useUser() {
         });
 
         return unsubscribe;
-    }, [dispatch]);
+    }, [dispatch, userData]);
 
     return { isLoading, user };
 }

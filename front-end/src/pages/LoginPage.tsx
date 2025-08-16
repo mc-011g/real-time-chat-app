@@ -3,10 +3,15 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import ShowPasswordContainer from "../components/ShowPasswordContainer";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useSelector } from "react-redux";
 import { getUser } from "../redux/selectors";
 import { UserContext } from "../context/UserContext";
+import { GoogleAuthProvider } from "firebase/auth";
+import SignInWithGoogleButton from "../components/SignInWithGoogleButton";
+import axios from "axios";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { loginThunk } from "../redux/thunks/loginThunk";
 
 export default function LoginPage() {
 
@@ -21,6 +26,29 @@ export default function LoginPage() {
     const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
     const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
+
+    const provider = new GoogleAuthProvider();
+    const dispatch = useAppDispatch();
+
+    const signInWithGoogle = async () => {
+        await signInWithPopup(getAuth(), provider).then(async (result) => {
+            const user = result.user;
+            const [firstName, lastName] = user.displayName ? user.displayName.split(" ") : ["", ""];
+
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/users/auth/register`, { id: user.uid, email: user.email, firstName, lastName }).then(async () => {
+                await dispatch(loginThunk(user));
+                setLoginSuccess(true);
+            }).catch((error: unknown) => {
+                if (axios.isAxiosError(error) && error.response && error.response.status === 400 &&
+                    error.response.data?.error === "A user exists with this email already.") {
+                    navigate("/");
+                }
+            });
+        }).catch((error) => {
+            const errorMessage = error.message;
+            console.log("Error: " + errorMessage);
+        });
+    };
 
     const login = () => {
         setIsLoggingIn(true);
@@ -104,6 +132,10 @@ export default function LoginPage() {
                         <div>Login</div>
                     </div>
                 </Button>
+
+                <div className="text-gray-600 text-center">Or</div>
+
+                <SignInWithGoogleButton onClick={signInWithGoogle} text={"Sign in with Google"} />
 
                 {error &&
                     <p className="text-red-800" data-cy="errorMessage">{error}</p>

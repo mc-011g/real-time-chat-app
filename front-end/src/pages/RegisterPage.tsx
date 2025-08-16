@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import ShowPasswordContainer from "../components/ShowPasswordContainer";
 import ShowConfirmPasswordContainer from "../components/ShowConfirmPasswordContainer";
 import { Link, useNavigate } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, validatePassword, deleteUser } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, validatePassword, deleteUser, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import axios from "axios";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import SignInWithGoogleButton from "../components/SignInWithGoogleButton";
+import { useSelector } from "react-redux";
+import { getUser } from "../redux/selectors";
+import { UserContext } from "../context/UserContext";
+import { useAppDispatch } from "../hooks/useAppDispatch";
+import { loginThunk } from "../redux/thunks/loginThunk";
 
 export default function RegisterPage() {
 
@@ -19,6 +25,12 @@ export default function RegisterPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [isRegistrationInProgress, setIsRegistrationInProgress] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+
+    const dispatch = useAppDispatch();
+
+    const userData = useSelector(getUser);
+    const user = useContext(UserContext);
+    const [loginSuccess, setLoginSuccess] = useState<boolean>(false);
 
     const [passwordRequirementsMet, setPasswordRequirementsMet] = useState<boolean>(false);
     const [isEmailValid, setIsEmailValid] = useState<boolean>(false);
@@ -64,6 +76,13 @@ export default function RegisterPage() {
             setIsLastNameValid(lastName.length >= 2);
         }
     }, [email, firstName, lastName]);
+
+    useEffect(() => {
+        if (userData && loginSuccess && user) {
+            navigate("/");
+            setLoginSuccess(false);
+        }
+    }, [loginSuccess, navigate, user, userData]);
 
     const register = async () => {
         if (password !== confirmPassword) {
@@ -127,6 +146,29 @@ export default function RegisterPage() {
             setIsRegistrationInProgress(false);
         }
     }
+
+    const provider = new GoogleAuthProvider();
+
+    const signInWithGoogle = async () => {
+        await signInWithPopup(getAuth(), provider).then(async (result) => {
+            const user = result.user;
+            const [firstName, lastName] = user.displayName ? user.displayName.split(" ") : ["", ""];
+
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/users/auth/register`, { id: user.uid, email: user.email, firstName, lastName }).then(async () => {
+                await dispatch(loginThunk(user));
+                setLoginSuccess(true);
+            }).catch((error: unknown) => {
+                if (axios.isAxiosError(error) && error.response && error.response.status === 400 &&
+                    error.response.data?.error === "A user exists with this email already."
+                ) {
+                    navigate("/");
+                }
+            });
+        }).catch((error) => {
+            const errorMessage = error.message;
+            console.log("Error: " + errorMessage);
+        });
+    };
 
     return (
         <div className="flex justify-center place-items-center min-h-screen sm:bg-gray-50">
@@ -267,6 +309,12 @@ export default function RegisterPage() {
                     </div>
                 </Button>
 
+                <div className="text-gray-600 text-center">Or</div>
+
+                <div className="flex justify-center">             
+                        <SignInWithGoogleButton onClick={signInWithGoogle} text={"Sign up with Google"} />         
+                </div>
+
                 {error &&
                     <p className="text-red-600" data-cy="errorMessage">{error}</p>
                 }
@@ -275,8 +323,8 @@ export default function RegisterPage() {
                     <Link to="/login" data-cy="loginLink">Login</Link>
                 </span>
                 </p>
-
             </form>
+
         </div>
     )
 }
