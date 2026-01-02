@@ -165,7 +165,7 @@ io.on('connection', (socket) => {
 
     socket.on('join-group', (groupId) => {
         socket.join(groupId);
-    });
+    });  
 
     socket.on('send-message', (message, groupId) => {
         io.to(groupId).emit('send-message', message);

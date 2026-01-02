@@ -123,7 +123,7 @@ export default function ChatPage() {
                 return;
             }
             dispatch(updateSelectedGroupParticipant(user));
-        }
+        }    
 
         socket.on('send-message', onSendMessage);
         socket.on('change-group-name', onChangeGroupName);
@@ -136,7 +136,9 @@ export default function ChatPage() {
             socket.off('send-message', onSendMessage);
             socket.off('change-group-name', onChangeGroupName);
             socket.off('delete-group', onDeleteGroup);
-            socket.off('leave-group', onRemoveUserFromGroup);
+            socket.off('add-user-to-group', onAddUserToGroup);
+            socket.off('remove-user-from-group', onRemoveUserFromGroup);
+            socket.off('update-group-participant', onUpdateGroupParticipant);
         }
     }, [dispatch]);
 
