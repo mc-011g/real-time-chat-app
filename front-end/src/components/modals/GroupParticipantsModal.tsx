@@ -47,10 +47,9 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
         dispatch(setSelectedGroupParticipants({ users: response.data, groupId: selectedGroup._id }));
         setIsLoadingParticipants(false);
       }
-
       getGroupParticipants();
     }
-  }, [dispatch, selectedGroup, user]);
+  }, [dispatch, participants, selectedGroup, user]);
 
   const handleCreateInvitation = async () => {
     setIsInvitationCreating(true);

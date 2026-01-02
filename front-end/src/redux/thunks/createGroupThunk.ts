@@ -1,26 +1,28 @@
 import axios from "axios";
-import type { GroupType } from "../../types/types";
+import type { GroupType, User } from "../../types/types";
 import { socket } from "../../socket";
-import { addGroup } from "../slices/groupsSlice";
-import type { User } from "firebase/auth";
+import { addGroup, setSelectedGroup } from "../slices/groupsSlice";
+import type { User as FirebaseUser } from "firebase/auth";
 
-export const createGroupThunk = (user: User, name: string) => async (dispatch: (arg0: { payload: GroupType; type: `${string}/addGroup`; }) => void) => {
+export const createGroupThunk = (user: FirebaseUser, name: string, userDetails: User) => async (dispatch: (arg0: { payload: string | GroupType | { users: User[]; groupId: string; }; type: `${string}/addGroup` | `${string}/setSelectedGroup` | `${string}/setSelectedGroupParticipants`; }) => void) => {
 
     const token = user && await user.getIdToken();
     const headers = token ? { authtoken: token } : {};
 
     if (!user) {
         return;
-    }
+    }  
 
     try {
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/chat/group`, { name }, { headers });
         const newGroup: GroupType = response.data;
 
         window.localStorage.setItem('selectedGroupId', newGroup._id);
-        dispatch(addGroup(newGroup));
         socket.emit('join-group', newGroup._id);
-
+        socket.emit('add-user-to-group', newGroup._id, userDetails);
+        dispatch(addGroup(newGroup));
+        dispatch(setSelectedGroup(newGroup._id));    
+   
         return { success: true };
     } catch (error) {
         if (axios.isAxiosError(error)) {

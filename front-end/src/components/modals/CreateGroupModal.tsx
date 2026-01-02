@@ -6,6 +6,8 @@ import type { ToastType } from "../../types/types";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { createGroupThunk } from "../../redux/thunks/createGroupThunk";
 import { UserContext } from "../../context/UserContext";
+import { useSelector } from "react-redux";
+import { getUser } from "../../redux/selectors";
 
 export default function CreateGroupModal({ setShowModal, setToast, setShowCreateGroupModal }:
     {
@@ -13,6 +15,8 @@ export default function CreateGroupModal({ setShowModal, setToast, setShowCreate
         setToast: (value: ToastType) => void,
         setShowCreateGroupModal: (value: boolean) => void
     }) {
+
+    const userDetails = useSelector(getUser);
 
     const user = useContext(UserContext);
     const dispatch = useAppDispatch();
@@ -23,11 +27,11 @@ export default function CreateGroupModal({ setShowModal, setToast, setShowCreate
     const handleCreateNewGroup = async () => {
         setIsCreatingGroup(true);
 
-        if (!user) {
+        if (!user || !userDetails) {
             return;
         }
 
-        dispatch(createGroupThunk(user, name)).then((val) => {
+        dispatch(createGroupThunk(user, name, userDetails)).then((val) => {
             if (val?.error) {
                 setError(val.error);
             } else {

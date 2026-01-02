@@ -29,11 +29,11 @@ export default function JoinGroupPage() {
             const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/groups/invitation/${params.id}`, {}, { headers });
             const { user, group } = response.data;
 
-            socket.emit('join-group', group._id);
             window.localStorage.setItem('selectedGroupId', group._id);
-            dispatch(setSelectedGroup(group._id));
-            dispatch(addGroup(group))
+            socket.emit('join-group', group._id);
             socket.emit('add-user-to-group', group._id, user);
+            dispatch(addGroup(group))
+            dispatch(setSelectedGroup(group._id));
 
             navigate('/');
         } catch (error) {

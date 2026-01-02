@@ -125,12 +125,19 @@ export default function ChatPage() {
             dispatch(updateSelectedGroupParticipant(user));
         }    
 
+        function handleConnect() {
+            if (selectedGroupRef.current) {
+                socket.emit('join-group', selectedGroupRef.current);
+            }
+        }
+
         socket.on('send-message', onSendMessage);
         socket.on('change-group-name', onChangeGroupName);
         socket.on('delete-group', onDeleteGroup);
         socket.on('add-user-to-group', onAddUserToGroup);
         socket.on('remove-user-from-group', onRemoveUserFromGroup);
         socket.on('update-group-participant', onUpdateGroupParticipant);
+        socket.on('connect', handleConnect);
 
         return () => {
             socket.off('send-message', onSendMessage);
@@ -139,6 +146,7 @@ export default function ChatPage() {
             socket.off('add-user-to-group', onAddUserToGroup);
             socket.off('remove-user-from-group', onRemoveUserFromGroup);
             socket.off('update-group-participant', onUpdateGroupParticipant);
+            socket.off('connect', handleConnect);
         }
     }, [dispatch]);
 
