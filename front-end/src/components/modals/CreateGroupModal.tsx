@@ -43,8 +43,8 @@ export default function CreateGroupModal({ setShowModal, setToast, setShowCreate
         <Modal title={"Create New Group"} setShowModal={() => setShowModal(false)}>
             <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleCreateNewGroup(); }}>
                 <label>
-                    <span className="text-gray-600">Group Name</span>
-                    <Input placeholder={"Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required data-cy="createGroupInput" />
+                    <span className="text-gray-600">Group Name:</span>
+                    <Input extraClasses="mt-1" placeholder={"Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required data-cy="createGroupInput" />
                 </label>
 
                 <Button variant={"primary-solid"} type="submit"
@@ -58,7 +58,7 @@ export default function CreateGroupModal({ setShowModal, setToast, setShowCreate
                 </Button>
 
                 {error &&
-                    <div className="text-red-600">{error}</div>
+                    <div className="text-red-700">{error}</div>
                 }
             </form>
         </Modal>

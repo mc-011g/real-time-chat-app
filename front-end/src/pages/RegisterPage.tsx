@@ -171,30 +171,33 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="flex justify-center place-items-center min-h-screen sm:bg-gray-50">
-            <form className="flex flex-col gap-4 bg-white py-16 px-8 sm:shadow-lg" onSubmit={(e) => { e.preventDefault(); register(); }}>
-                <h1 className="text-3xl text-center mb-4 text-gray-900">Register</h1>
+        <main className="flex justify-center place-items-center min-h-screen sm:bg-gray-50">
+
+            <form className="flex flex-col gap-4 bg-white py-16 px-8 sm:shadow-lg w-[512px]" onSubmit={(e) => { e.preventDefault(); register(); }}>
+
+                <h1 className="text-xl sm:text-2xl md:text-3xl text-center mb-4 text-gray-900 text-2xl sm:text-3xl md:text-4xl font-bold">Register</h1>
+
                 <label>
                     <span className="text-gray-600">Email</span>
-                    <Input placeholder={"Email Address"} type={"email"} value={email} onChange={(e) => (setEmail(e.target.value))} required data-cy="emailInput" />
+                    <Input extraClasses="mt-1" placeholder={"Email Address"} type={"email"} value={email} onChange={(e) => (setEmail(e.target.value))} required data-cy="emailInput" />
                     {email && !isEmailValid &&
-                        <div className="text-red-600" data-cy="invalidEmailMessage">Please enter a valid email address.</div>
+                        <div className="text-red-700" data-cy="invalidEmailMessage">Please enter a valid email address.</div>
                     }
                 </label>
 
                 <div className="flex flex-col sm:flex-row gap-4">
                     <label>
                         <span className="text-gray-600">First Name</span>
-                        <Input placeholder={"First Name"} type={"text"} value={firstName} onChange={(e) => (setFirstName(e.target.value))} required data-cy="firstNameInput" />
+                        <Input extraClasses="mt-1" placeholder={"First Name"} type={"text"} value={firstName} onChange={(e) => (setFirstName(e.target.value))} required data-cy="firstNameInput" />
                         {firstName && !isFirstNameValid &&
-                            <div className="text-red-600" data-cy="invalidFirstNameMessage">First name must be at least 2 characters.</div>
+                            <div className="text-red-700" data-cy="invalidFirstNameMessage">First name must be at least 2 characters.</div>
                         }
                     </label>
                     <label>
                         <span className="text-gray-600">Last Name</span>
-                        <Input placeholder={"Last Name"} type={"text"} value={lastName} onChange={(e) => (setLastName(e.target.value))} required data-cy="lastNameInput" />
+                        <Input extraClasses="mt-1" placeholder={"Last Name"} type={"text"} value={lastName} onChange={(e) => (setLastName(e.target.value))} required data-cy="lastNameInput" />
                         {lastName && !isLastNameValid &&
-                            <div className="text-red-600" data-cy="invalidLastNameMessage">Last name must be at least 2 characters.</div>
+                            <div className="text-red-700" data-cy="invalidLastNameMessage">Last name must be at least 2 characters.</div>
                         }
                     </label>
                 </div>
@@ -202,7 +205,7 @@ export default function RegisterPage() {
                     <label className="grow">
                         <span className="text-gray-600">Password</span>
                         <ShowPasswordContainer showPassword={showPassword} setShowPassword={setShowPassword}>
-                            <Input placeholder={"Password"} type={showPassword ? "text" : "password"} value={password} onChange={(e) => (setPassword(e.target.value))}
+                            <Input extraClasses="mt-1" placeholder={"Password"} type={showPassword ? "text" : "password"} value={password} onChange={(e) => (setPassword(e.target.value))}
                                 required data-cy="passwordInput"
                             />
                         </ShowPasswordContainer>
@@ -210,7 +213,7 @@ export default function RegisterPage() {
                     <label className="grow">
                         <span className="text-gray-600">Confirm Password</span>
                         <ShowConfirmPasswordContainer showConfirmPassword={showConfirmPassword} setShowConfirmPassword={setShowConfirmPassword}>
-                            <Input placeholder={"Confirm Password"} type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => (setConfirmPassword(e.target.value))}
+                            <Input extraClasses="mt-1" placeholder={"Confirm Password"} type={showConfirmPassword ? "text" : "password"} value={confirmPassword} onChange={(e) => (setConfirmPassword(e.target.value))}
                                 required data-cy="confirmPasswordInput"
                             />
                         </ShowConfirmPasswordContainer>
@@ -225,52 +228,52 @@ export default function RegisterPage() {
                                 <li className="inline-flex gap-1">
                                     {passwordRequirementsState?.min8Chars ?
                                         <>
-                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-600" />
-                                            <span className="text-green-600">Must be at least 8 characters</span>
+                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-700" />
+                                            <span className="text-green-700">Must be at least 8 characters</span>
                                         </>
                                         :
                                         <>
-                                            <XCircleIcon className="min-w-6 max-w-6 text-red-600" />
-                                            <span className="text-red-600">Must be at least 8 characters</span>
+                                            <XCircleIcon className="min-w-6 max-w-6 text-red-700" />
+                                            <span className="text-red-700">Must be at least 8 characters</span>
                                         </>
                                     }
                                 </li>
                                 <li className="inline-flex gap-1">
                                     {passwordRequirementsState?.lowerCaseChar ?
                                         <>
-                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-600" />
-                                            <span className="text-green-600">At least one lowercase letter</span>
+                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-700" />
+                                            <span className="text-green-700">At least one lowercase letter</span>
                                         </>
                                         :
                                         <>
-                                            <XCircleIcon className="min-w-6 max-w-6 text-red-600" />
-                                            <span className="text-red-600">At least one lowercase letter</span>
+                                            <XCircleIcon className="min-w-6 max-w-6 text-red-700" />
+                                            <span className="text-red-700">At least one lowercase letter</span>
                                         </>
                                     }
                                 </li>
                                 <li className="inline-flex gap-1">
                                     {passwordRequirementsState?.upperCaseChar ?
                                         <>
-                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-600" />
-                                            <span className="text-green-600">At least one uppercase letter</span>
+                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-700" />
+                                            <span className="text-green-700">At least one uppercase letter</span>
                                         </>
                                         :
                                         <>
-                                            <XCircleIcon className="min-w-6 max-w-6 text-red-600" />
-                                            <span className="text-red-600" data-cy="failedUppercaseRequirement">At least one uppercase letter</span>
+                                            <XCircleIcon className="min-w-6 max-w-6 text-red-700" />
+                                            <span className="text-red-700" data-cy="failedUppercaseRequirement">At least one uppercase letter</span>
                                         </>
                                     }
                                 </li>
                                 <li className="inline-flex gap-1">
                                     {passwordRequirementsState?.specialChar ?
                                         <>
-                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-600" />
-                                            <span className="text-green-600" data-cy="passedSpecialCharacterRequirement">At least one special character</span>
+                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-700" />
+                                            <span className="text-green-700" data-cy="passedSpecialCharacterRequirement">At least one special character</span>
                                         </>
                                         :
                                         <>
-                                            <XCircleIcon className="min-w-6 max-w-6 text-red-600" />
-                                            <span className="text-red-600" data-cy="failedSpecialCharacterRequirement">At least one special character</span>
+                                            <XCircleIcon className="min-w-6 max-w-6 text-red-700" />
+                                            <span className="text-red-700" data-cy="failedSpecialCharacterRequirement">At least one special character</span>
                                         </>
                                     }
 
@@ -278,13 +281,13 @@ export default function RegisterPage() {
                                 <li className="inline-flex gap-1">
                                     {passwordRequirementsState?.numericChar ?
                                         <>
-                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-600" />
-                                            <span className="text-green-600">At least one numeric character</span>
+                                            <CheckCircleIcon className="min-w-6 max-w-6 text-green-700" />
+                                            <span className="text-green-700">At least one numeric character</span>
                                         </>
                                         :
                                         <>
-                                            <XCircleIcon className="min-w-6 max-w-6 text-red-600" />
-                                            <span className="text-red-600">At least one numeric character</span>
+                                            <XCircleIcon className="min-w-6 max-w-6 text-red-700" />
+                                            <span className="text-red-700">At least one numeric character</span>
                                         </>
                                     }
                                 </li>
@@ -294,7 +297,7 @@ export default function RegisterPage() {
                 </div>
 
                 {password && password !== confirmPassword &&
-                    <div className="text-red-600 mb-2" data-cy="notMatchingPasswordsMessage">Passwords must match.</div>
+                    <div className="text-red-700 mb-2" data-cy="notMatchingPasswordsMessage">Passwords must match.</div>
                 }
 
                 <Button variant={"primary-solid"} type="submit"
@@ -311,20 +314,20 @@ export default function RegisterPage() {
 
                 <div className="text-gray-600 text-center">Or</div>
 
-                <div className="flex justify-center">             
-                        <SignInWithGoogleButton onClick={signInWithGoogle} text={"Sign up with Google"} />         
+                <div className="mx-auto">
+                    <SignInWithGoogleButton onClick={signInWithGoogle} text={"Sign up with Google"} />
                 </div>
 
                 {error &&
-                    <p className="text-red-600" data-cy="errorMessage">{error}</p>
+                    <p className="text-red-700" data-cy="errorMessage">{error}</p>
                 }
 
-                <p className="text-gray-600">Already have an account? <span className="text-gray-900 font-bold hover:cursor-pointer">
+                <p className="text-gray-600 mt-4">Already have an account? <span className="text-gray-900 font-bold hover:cursor-pointer">
                     <Link to="/login" data-cy="loginLink">Login</Link>
                 </span>
                 </p>
             </form>
 
-        </div>
+        </main>
     )
 }

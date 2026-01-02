@@ -6,12 +6,12 @@ export default function ShowPasswordContainer({ children, showPassword, setShowP
         <div className="relative flex items-center justify-end text-gray-600">
             {children}
             {showPassword ?
-                <button type="button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="togglePasswordTypePasswordButton">
-                    <EyeIcon className="w-6 h-6" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} />
+                <button type="button" aria-label="Show password button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="togglePasswordTypePasswordButton" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }}>
+                    <EyeIcon className="w-6 h-6" />
                 </button>
                 :
-                <button type="button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="togglePasswordTypeTextButton">
-                    <EyeSlashIcon className="w-6 h-6" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }} />
+                <button type="button" aria-label="Hide password button" className="absolute z-10 bg-transparent mx-4 hover:cursor-pointer" data-cy="togglePasswordTypeTextButton" onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }}>
+                    <EyeSlashIcon className="w-6 h-6" />
                 </button>
             }
         </div>

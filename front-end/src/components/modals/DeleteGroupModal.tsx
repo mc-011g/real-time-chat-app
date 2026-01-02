@@ -60,7 +60,7 @@ export default function DeleteGroupModal({ setShowModal, setDeleteGroupModal, se
                 </Button>
 
                 {error &&
-                    <div className="text-red-600">
+                    <div className="text-red-700">
                         {error}
                     </div>
                 }

@@ -48,18 +48,18 @@ export default function JoinGroupPage() {
     }
 
     return (
-        <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-50">
-            <div className="bg-white p-16 flex flex-col gap-4 rounded-xl shadow-xl items-center">
-                <h1 className="text-3xl text-gray-900" data-cy="joinGroupText">You have been invited to join a group.</h1>
-                <Button variant={"primary-solid"} onClick={handleJoinGroup} disabled={isJoiningGroup} data-cy="joinGroupButton">
+        <main className="w-screen h-screen flex flex-col justify-center items-center sm:bg-gray-50">
+            <div className="bg-white py-16 px-4 sm:px-8 flex flex-col gap-4 sm:rounded-lg sm:shadow-xl items-center">
+                <h1 className="text-xl sm:text-2xl md:text-3xl text-gray-900" data-cy="joinGroupText">You have been invited to join a group.</h1>
+                <Button type="button" variant={"primary-solid"} onClick={handleJoinGroup} disabled={isJoiningGroup} data-cy="joinGroupButton">
                     Join
                 </Button>
                 {error &&
-                    <div className="text-red-600">
+                    <div className="text-red-700">
                         {error}
                     </div>
                 }
             </div>
-        </div>
+        </main>
     )
 }

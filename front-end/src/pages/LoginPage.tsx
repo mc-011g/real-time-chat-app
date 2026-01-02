@@ -104,27 +104,29 @@ export default function LoginPage() {
     }, [email]);
 
     return (
-        <div className="flex justify-center place-items-center min-h-screen sm:bg-gray-50">
+        <main className="flex justify-center place-items-center min-h-screen sm:bg-gray-50">
 
-            <form className="flex flex-col gap-4 bg-white py-16 px-8 sm:shadow-lg" onSubmit={(e) => { e.preventDefault(); login(); }}>
-                <h1 className="text-3xl text-center mb-4 text-gray-900">Login</h1>
+            <form className="flex flex-col gap-4 bg-white rounded-lg py-16 px-8 sm:shadow-lg sm:w-[512px]" onSubmit={(e) => { e.preventDefault(); login(); }}>
 
-                <label>
-                    <span className="text-gray-600">Email</span>
-                    <Input required placeholder={"Email Address"} type={"email"} value={email} onChange={(e) => (setEmail(e.target.value))} data-cy="emailInput"></Input>
-                    {email && !isEmailValid &&
-                        <div className="text-red-600" data-cy="invalidEmailMessage">Please enter a valid email address.</div>
-                    }
-                </label>
+                <h1 className="text-xl sm:text-2xl md:text-3xl text-center mb-4 text-gray-900 text-2xl sm:text-3xl md:text-4xl font-bold">Login</h1>
 
-                <label>
-                    <span className="text-gray-600">Password</span>
-                    <ShowPasswordContainer showPassword={showPassword} setShowPassword={setShowPassword}>
-                        <Input required placeholder={"Password"} type={showPassword ? "text" : "password"} value={password} onChange={(e) => (setPassword(e.target.value))} data-cy="passwordInput"></Input>
-                    </ShowPasswordContainer>
-                </label>
+                <div className="flex flex-col gap-4 mb-4">
+                    <label>
+                        <span className="text-gray-600">Email:</span>
+                        <Input extraClasses="mt-1" required placeholder={"Email Address"} type={"email"} value={email} onChange={(e) => (setEmail(e.target.value))} data-cy="emailInput"></Input>
+                        {email && !isEmailValid &&
+                            <div className="text-red-700" data-cy="invalidEmailMessage">Please enter a valid email address.</div>
+                        }
+                    </label>
+                    <label>
+                        <span className="text-gray-600">Password:</span>
+                        <ShowPasswordContainer showPassword={showPassword} setShowPassword={setShowPassword}>
+                            <Input required placeholder={"Password"} type={showPassword ? "text" : "password"} value={password} onChange={(e) => (setPassword(e.target.value))} data-cy="passwordInput"></Input>
+                        </ShowPasswordContainer>
+                    </label>
+                </div>
 
-                <Button type="submit" variant={"primary-solid"} disabled={isLoggingIn || !isEmailValid || !password} data-cy="loginButton">
+                <Button type="submit" variant={"primary-solid"} data-cy="loginButton">
                     <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
                         {isLoggingIn &&
                             <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>
@@ -135,19 +137,22 @@ export default function LoginPage() {
 
                 <div className="text-gray-600 text-center">Or</div>
 
-                <SignInWithGoogleButton onClick={signInWithGoogle} text={"Sign in with Google"} />
+                <div className="mx-auto">
+                    <SignInWithGoogleButton onClick={signInWithGoogle} text={"Sign in with Google"} />
+                </div>
 
                 {error &&
                     <p className="text-red-800" data-cy="errorMessage">{error}</p>
                 }
 
-                <p className="text-gray-600 m-0">Don't have an account yet? <span className="text-gray-900 font-bold hover:cursor-pointer">
-                    <Link to="/register">Register</Link>
-                </span>
-                </p>
+                <div className="flex flex-col gap-2">
+                    <p className="text-gray-600 mt-4">Don't have an account yet?
+                        <Link className="text-gray-900 font-bold ml-2" to="/register">Register</Link>
+                    </p>
+                    <Link to="/forgot-password" className="text-gray-600" data-cy="forgotPasswordLink">Forgot password?</Link>
+                </div>
 
-                <Link to="/forgot-password" className="text-gray-600" data-cy="forgotPasswordLink">Forgot password?</Link>
             </form>
-        </div>
+        </main>
     )
 }

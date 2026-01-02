@@ -91,8 +91,8 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
           <div className="h-full overflow-scroll" data-cy="groupParticipantsList">
             <div className="flex flex-col">
               {participants && !isLoadingParticipants && participants.map(participant => (
-                <div key={participant?._id} className="flex flex-row items-center gap-2 hover:bg-gray-100 rounded-xl p-2">
-                  <UserImageContainer firstName={participant?.lastName as string} lastName={participant?.firstName as string} bgColor={participant?.bgColor as string} size={"small"} />
+                <div key={participant?._id} className="flex flex-row items-center gap-2 hover:bg-gray-100 focus:bg-gray-100 rounded-lg p-2">
+                  <UserImageContainer firstName={participant?.firstName as string} lastName={participant?.lastName as string} bgColor={participant?.bgColor as string} size={"small"} />
                   <span className="text-gray-600" data-cy="groupParticipantName">{participant?.firstName} {participant?.lastName}</span>
                 </div>
               ))}
@@ -104,7 +104,7 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
             </div>
           </div>
 
-          <Button variant={"primary-solid"} onClick={handleCreateInvitation}
+          <Button type="button" variant={"primary-solid"} onClick={handleCreateInvitation}
             disabled={isInvitationCreating} data-cy="createInvitationButton">
             <div className="flex flex-row gap-2 align-middle justify-center place-items-center">
               {isInvitationCreating &&
@@ -115,7 +115,7 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
           </Button>
 
           {error &&
-            <div className="text-red-600 my-2">
+            <div className="text-red-700 my-2">
               {error}
             </div>
           }
@@ -126,7 +126,7 @@ export default function GroupParticipantsModal({ setGroupParticipantsModal }: {
           {invitationLink &&
             <p data-cy="invitationLink">{invitationLink.url}</p>
           }
-          <Button variant={"primary-solid"} onClick={() => setInvitationCreated(false)}>Go Back</Button>
+          <Button variant={"primary-solid"} type="button" onClick={() => setInvitationCreated(false)}>Go Back</Button>
         </div>
       }
     </Modal>

@@ -32,8 +32,8 @@ export default function ChangeEmailModal({ setChangeEmailModal }:
             verifyBeforeUpdateEmail(user, email).then(() => {
                 setMessage("A verification email has been sent to the new email. Please check your inbox and log in again.");
                 return;
-            }).catch((error) => {
-                setError('Failed to update email. Please try logging in again.' + error);
+            }).catch(() => {
+                setError('Failed to update email. Please try logging in again.');
             });
         }
 
@@ -44,12 +44,12 @@ export default function ChangeEmailModal({ setChangeEmailModal }:
         <Modal title={"Update Email"} setShowModal={() => setChangeEmailModal(false)}>
             <form className="flex flex-col justify-between h-full gap-4" onSubmit={e => { e.preventDefault(); handleChangeEmail(); }} data-cy="profileChangeEmailModal">
                 <label>
-                    <span className="text-gray-600">Current Email</span>
+                    <span className="text-gray-600 mb-1">Current Email</span>
                     <div>{user?.email}</div>
                 </label>
 
                 <label>
-                    <span className="text-gray-600">New Email</span>
+                    <span className="text-gray-600 mb-1">New Email</span>
                     <Input placeholder={"Email Address"} type={"email"} value={email}
                         onChange={(e) => (setEmail(e.target.value))} minLength={2} required
                         data-cy="profileChangeEmailInput" />
@@ -62,15 +62,15 @@ export default function ChangeEmailModal({ setChangeEmailModal }:
                         {isChangingEmail &&
                             <div className="border-blue-400 border-t-blue-50 w-4 h-4 border-2 rounded-full animate-spin"></div>
                         }
-                        <div>Submit</div>
+                        Submit
                     </div>
                 </Button>
 
                 {message &&
-                    <div className="text-green-600" data-cy="profileChangeEmailMessage">{message}</div>
+                    <div className="text-green-700" data-cy="profileChangeEmailMessage">{message}</div>
                 }
                 {error &&
-                    <div className="text-red-600">{error}</div>
+                    <div className="text-red-700">{error}</div>
                 }
             </form>
         </Modal>

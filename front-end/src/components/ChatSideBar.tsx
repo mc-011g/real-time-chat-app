@@ -3,7 +3,7 @@ import Input from "./Input";
 import GroupImageContainer from "./GroupImageContainer";
 import UserImageContainer from "./UserImageContainer";
 import DropdownContainer from "./dropdown/DropdownContainer";
-import { ArrowRightStartOnRectangleIcon, MagnifyingGlassIcon, PlusIcon, UserIcon } from "@heroicons/react/24/solid";
+import { ArrowRightStartOnRectangleIcon, MagnifyingGlassIcon, PlusIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import DropdownList from "./dropdown/DropdownList";
 import DropdownItem from "./dropdown/DropdownItem";
 import { useNavigate } from "react-router-dom";
@@ -81,13 +81,89 @@ export default function ChatSideBar({ dropdown, setDropdown, dropDownRef, setSho
         }
     }, [searchGroupQuery, groupsList]);
 
-    return (
-        <div className={`${showSideBarToggle ? 'absolute sm:relative' : 'hidden'}  w-[250px] min-w-[250px] bg-white pb-4 sm:flex flex-col text-gray-900 border border-gray-300 z-30 h-screen`}>
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+    useEffect(() => {
+        const onResize = () => {
+            if (window.innerWidth < 640) {
+                setIsMobile(true);
+            } else {
+                setShowSideBarToggle(false);
+                setIsMobile(false);
+            }
+        }
+        window.addEventListener("resize", onResize);
 
-            <div className="flex flex-row items-center gap-2 px-4 py-4 border-b border-gray-300" onClick={() =>
-                (dropdown !== "profile" ? setDropdown("profile") : setDropdown(null))}>
+        return () => {
+            window.removeEventListener("resize", onResize);
+        }
+    }, [setShowSideBarToggle]);
+
+
+    const sideBarRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!isMobile) {
+            return;
+        }
+
+        const sideBarNode = sideBarRef.current;
+
+        if (!sideBarNode) {
+            return;
+        }
+
+        sideBarNode.focus();
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Tab") {
+
+                const focusableSelectors = 'button, input, [tabindex]:not([tabindex="-1"])';
+                const focusableElements = sideBarNode.querySelectorAll<HTMLElement>(focusableSelectors)
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (focusableElements.length === 0) {
+                    e.preventDefault();
+                    return;
+                }
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        e.preventDefault();
+                        lastElement.focus();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        e.preventDefault();
+                        firstElement.focus();
+                    }
+                }
+            }
+            if (e.key === "Escape") {
+                setShowSideBarToggle(false);
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        }
+    }, [setShowSideBarToggle, isMobile]);
+
+
+    return (
+        <div ref={showSideBarToggle ? sideBarRef : null} aria-modal={showSideBarToggle} aria-label="Side bar" role={`${showSideBarToggle ? "dialog" : ''}`} className={`${showSideBarToggle ? 'absolute sm:relative' : 'hidden'}  w-[256px] min-w-[256px] bg-gray-50 pb-4 sm:flex flex-col text-gray-950 border border-gray-300 z-30 h-screen`}>
+
+            <div className="flex flex-row items-center gap-2 px-4 py-4 border-b border-gray-300" >
+
                 <DropdownContainer>
-                    <UserImageContainer firstName={userData?.firstName as string} lastName={userData?.lastName as string} bgColor={userData?.bgColor as string} size={"small"} data-cy="userProfileImage" />
+
+                    <button type="button" className="cursor-pointer" aria-label="User profile button" onClick={() => (dropdown !== "profile" ? setDropdown("profile") : setDropdown(null))}>
+                        <UserImageContainer
+                            firstName={userData?.firstName as string} lastName={userData?.lastName as string}
+                            bgColor={userData?.bgColor as string} size={"small"} data-cy="userProfileImage"
+                        />
+                    </button>
+
                     {dropdown === "profile" &&
                         <DropdownList dropdownSide="right" dropDownRef={dropDownRef}>
                             <DropdownItem onClick={() => navigate("/profile")} data-cy="userProfileDropdownItem">
@@ -100,35 +176,47 @@ export default function ChatSideBar({ dropdown, setDropdown, dropDownRef, setSho
                             </DropdownItem>
                         </DropdownList>
                     }
+
                 </DropdownContainer>
+
                 {userData &&
                     <>
                         <span data-cy="userName">{userData?.firstName + ' ' + userData?.lastName}</span>
                     </>
                 }
+
+                <button type="button" aria-label="Close side bar button" className={`${!showSideBarToggle ? 'hidden' : 'sm:hidden'} cursor-pointer`} onClick={() => setShowSideBarToggle(false)}>
+                    <XMarkIcon className="size-10" />
+                </button>
+
             </div>
 
-            <div className="px-4 flex-1 pt-4 flex flex-col overflow-y-hidden gap-2">
-                <div className="flex flex-row justify-between items-center mb-2">
+            <div className="px-4 flex-1 pt-4 flex flex-col overflow-y-hidden gap-4">
+
+                <div className="flex flex-row justify-between items-center">
                     <h1 className="text-2xl">Chats</h1>
-                    <button className="hover:cursor-pointer" onClick={() => setShowCreateGroupModal(true)} data-cy="createGroupButtonSideBar">
+                    <button type="button" aria-label="Create new group button" className="hover:cursor-pointer focus:cursor-pointer" onClick={() => setShowCreateGroupModal(true)} data-cy="createGroupButtonSideBar">
                         <PlusIcon className="size-6" />
                     </button>
                 </div>
+
                 <div className="relative flex justify-end items-center">
-                    <Input placeholder={"Search group"} type={"text"} value={searchGroupQuery} onChange={(e) => setSearchGroupQuery(e.target.value)} data-cy="searchGroupInput" />
+                    <label htmlFor="searchGroupsInputBox" className="sr-only">Search Groups: </label>
+                    <Input id="searchGroupsInputBox" placeholder={"Search group"} type={"text"} value={searchGroupQuery} onChange={(e) => setSearchGroupQuery(e.target.value)} data-cy="searchGroupInput" />
                     <MagnifyingGlassIcon className="w-6 h-6 absolute text-gray-600 mr-2" />
                 </div>
+
                 <div className="flex h-full overflow-y-scroll">
-                    <div className="flex flex-col flex-1 h-full">
+
+                    <div className="flex flex-col flex-1 h-full gap-1">
                         {groupsList && !isGroupsLoading ?
                             <>
                                 {((filteredGroups && searchGroupQuery.length > 0) ? filteredGroups : groupsList).map(group =>
-                                    <div key={group._id} className={`${selectedGroup && selectedGroup._id === group._id && "bg-gray-200 hover:bg-gray-200"} flex flex-row items-center gap-2 hover:bg-gray-100 p-2 rounded-xl hover:cursor-pointer`} onClick={() => { handleSelectGroup(group._id as string); setShowSideBarToggle(false) }}
+                                    <button type="button" aria-label={`Open group button for: ${group.name}`} key={group._id} className={`hover:bg-gray-200 focus:bg-gray-200 ${selectedGroup && selectedGroup._id === group._id && "bg-gray-200 hover:bg-gray-200 focus:bg-gray-200"} flex flex-row items-center gap-2 p-2 rounded-lg hover:cursor-pointer`} onClick={() => { handleSelectGroup(group._id as string); setShowSideBarToggle(false) }}
                                         data-cy="group">
                                         <GroupImageContainer />
                                         <span className="truncate max-w-full">{group.name}</span>
-                                    </div>
+                                    </button>
                                 )
                                 }
                             </>
@@ -138,6 +226,7 @@ export default function ChatSideBar({ dropdown, setDropdown, dropDownRef, setSho
                             </div>
                         }
                     </div>
+
                 </div>
             </div>
         </div>

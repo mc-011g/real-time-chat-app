@@ -64,6 +64,8 @@ export default function SendMessageBar() {
     <>
       {selectedGroup && (
         <div className="p-4 relative flex flex-row justify-end items-center">
+
+          <label className="sr-only" htmlFor="sendMessageInputBox">Send a message</label>
           <Input
             placeholder="Enter a message"
             type="text"
@@ -71,9 +73,12 @@ export default function SendMessageBar() {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleKeyPress}
             data-cy="sendMessageInput"
+            id="sendMessageInputBox"
+            aria-label="Enter a message"
           />
+
           <div className="absolute mr-2 mx-2 items-center flex">
-            <button className="hover:cursor-pointer" onClick={handleSendMessage} data-cy="sendMessageButton">
+            <button type="button" aria-label="Send message button" className="hover:cursor-pointer" onClick={handleSendMessage} data-cy="sendMessageButton">
               <PaperAirplaneIcon
                 className="w-6 h-6 text-gray-600"
               />

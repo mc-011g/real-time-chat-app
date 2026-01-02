@@ -59,7 +59,7 @@ export default function ChangeRoomNameModal({ setToast, setShowModal, setChangeG
 
                 <label>
                     <span className="text-gray-600">New Group Name</span>
-                    <Input placeholder={"New Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required data-cy="changeGroupNameInput" />
+                    <Input extraClasses="mt-1" placeholder={"New Group Name"} type={"text"} value={name} onChange={(e) => setName(e.target.value)} required data-cy="changeGroupNameInput" />
                 </label>
 
                 <Button variant={"primary-solid"} type="submit"
@@ -74,7 +74,7 @@ export default function ChangeRoomNameModal({ setToast, setShowModal, setChangeG
                 </Button>
 
                 {error &&
-                    <div className="text-red-600">{error}</div>
+                    <div className="text-red-700">{error}</div>
                 }
             </form>
         </Modal>

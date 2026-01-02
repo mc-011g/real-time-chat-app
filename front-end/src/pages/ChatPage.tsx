@@ -31,6 +31,28 @@ export default function ChatPage() {
     const [showDeleteGroupModal, setDeleteGroupModal] = useState<boolean>(false);
     const [showLeaveGroupModal, setLeaveGroupModal] = useState<boolean>(false);
     const [showChangeGroupNameModal, setChangeGroupNameModal] = useState<boolean>(false);
+
+    const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (showChangeGroupNameModal ||
+            showCreateGroupModal ||
+            showLeaveGroupModal ||
+            showGroupParticipantsModal ||
+            showDeleteGroupModal
+        ) {
+            setModalOpen(true);
+        } else {
+            setModalOpen(false);
+        }
+
+    }, [showChangeGroupNameModal,
+        showGroupParticipantsModal,
+        showCreateGroupModal,
+        showDeleteGroupModal,
+        showLeaveGroupModal
+    ])
+
     const [showSideBarToggle, setShowSideBarToggle] = useState<boolean>(false);
 
     const toastTimer = useRef<number | null>(null);
@@ -119,7 +141,8 @@ export default function ChatPage() {
     }, [dispatch]);
 
     return (
-        <div className="flex h-[100vh]">
+
+        <>
             {showGroupParticipantsModal &&
                 <GroupParticipantsModal setGroupParticipantsModal={setGroupParticipantsModal} />
             }
@@ -136,41 +159,46 @@ export default function ChatPage() {
                 <LeaveGroupModal setShowModal={setLeaveGroupModal} setToast={setToast} setLeaveGroupModal={setLeaveGroupModal} />
             }
 
-            {toast &&
+            {toast && !modalOpen &&
                 <Toast closeToast={() => setToast(null)}>
-                    <>
-                        {toast.success ?
-                            <CheckCircleIcon className="w-6 h-6 text-green-600" />
-                            :
-                            <XMarkIcon className="size-6 text-red-600" />
-                        }
-                        <span className="text-gray-900" data-cy="toastMessage">{toast.message}</span>
-                    </>
+                    {toast.success ?
+                        <CheckCircleIcon className="w-6 h-6 text-green-700" />
+                        :
+                        <XMarkIcon className="size-6 text-red-700" />
+                    }
+                    <span className="text-gray-950" data-cy="toastMessage">{toast.message}</span>
                 </Toast>
             }
 
-            <ChatSideBar setShowSideBarToggle={setShowSideBarToggle} dropdown={dropdown} setDropdown={setDropdown} dropDownRef={dropDownRef} setShowCreateGroupModal={setShowCreateGroupModal} showSideBarToggle={showSideBarToggle} />
-
-            {showSideBarToggle &&
-                <div className="sm:hidden h-screen w-screen bg-black absolute z-20 opacity-50" onClick={() => setShowSideBarToggle(false)}></div>
-            }
-
-            <div className="flex flex-col grow">
-                <ChatHeader
+            <main className="flex h-[100vh] overflow-x-hidden" aria-hidden={modalOpen} inert={modalOpen}>
+                <ChatSideBar
                     setShowSideBarToggle={setShowSideBarToggle}
-                    showGroupParticipantsModal={setGroupParticipantsModal}
-                    showChangeGroupNameModal={setChangeGroupNameModal}
-                    showDeleteGroupModal={setDeleteGroupModal}
-                    showLeaveGroupModal={setLeaveGroupModal}
-                    dropdown={dropdown}
-                    setDropdown={setDropdown}
-                    dropDownRef={dropDownRef}
-                />
-                <div className="flex flex-col h-[100vh] relative">
-                    <MessageList setShowCreateGroupModal={setShowCreateGroupModal} />
-                    <SendMessageBar />
+                    dropdown={dropdown} setDropdown={setDropdown}
+                    dropDownRef={dropDownRef} setShowCreateGroupModal={setShowCreateGroupModal}
+                    showSideBarToggle={showSideBarToggle} />
+
+                {showSideBarToggle &&
+                    <div aria-hidden="true" className="sm:hidden bg-black fixed inset-0 z-20 opacity-75" onClick={() => setShowSideBarToggle(false)}></div>
+                }
+
+                <div className="flex flex-col grow" aria-hidden={showSideBarToggle} inert={showSideBarToggle}>
+                    <ChatHeader
+                        setShowSideBarToggle={setShowSideBarToggle}
+                        showGroupParticipantsModal={setGroupParticipantsModal}
+                        showChangeGroupNameModal={setChangeGroupNameModal}
+                        showDeleteGroupModal={setDeleteGroupModal}
+                        showLeaveGroupModal={setLeaveGroupModal}
+                        dropdown={dropdown}
+                        setDropdown={setDropdown}
+                        dropDownRef={dropDownRef}
+                    />
+
+                    <div className="flex flex-col h-[100vh] relative">
+                        <MessageList setShowCreateGroupModal={setShowCreateGroupModal} />
+                        <SendMessageBar />
+                    </div>
                 </div>
-            </div>
-        </div>
+            </main>
+        </>
     )
 }

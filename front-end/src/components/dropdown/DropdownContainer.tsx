@@ -7,5 +7,4 @@ export default function DropdownContainer({ children }: { children: ReactNode })
             <div>{children}</div>
         </div>
     )
-
 }

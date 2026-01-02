@@ -4,7 +4,7 @@ export default function DropdownList({ children, dropdownSide, extraClasses, dro
 
     return (
         <div ref={dropDownRef} {...props} className={`${extraClasses} grid grid-cols-[auto_1fr] text-gray-600 shadow-xl bg-white py-2
-        rounded-xl overflow-hidden absolute ${dropdownSide === "left" && "-left-6"} ${dropdownSide === "right" && ""}`}>
+        rounded-lg overflow-hidden absolute ${dropdownSide === "left" && "-left-6"} ${dropdownSide === "right" && ""}`}>
             {children}
         </div>
     )

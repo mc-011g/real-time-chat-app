@@ -35,20 +35,20 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex justify-center place-items-center h-[100vh] sm:bg-gray-50 text-gray-900">
+    <main className="flex justify-center place-items-center h-[100vh] sm:bg-gray-50 text-gray-950">
 
-      <div className="flex flex-col gap-4 bg-white p-8 sm:shadow-xl rounded-xl">
+      <div className="flex flex-col gap-4 bg-white py-16 px-4 sm:px-8 sm:shadow-xl rounded-lg">
 
-        <Link to={"/login"} className="flex flex-row gap-2 mb-2 hover:cursor-pointer" data-cy="forgotPasswordBackButton">
-          <ArrowLeftIcon className="size-6 text-gray-800" />
+        <Link to={"/login"} aria-label="Back to login link" className="flex flex-row gap-2 mb-2 hover:cursor-pointer" data-cy="forgotPasswordBackButton">
+          <ArrowLeftIcon className="size-6 text-gray-600" />
         </Link>
 
-        <h1 className="text-3xl">Forgot Password</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Forgot Password</h1>
         <p className="text-gray-600">Please enter your email address to get a password reset link.</p>
 
         <form onSubmit={(e) => { e.preventDefault(); handleSendEmail(); }} className="flex flex-col gap-4">
           <label>
-            <span className="text-gray-600">Email</span>
+            <span className="text-gray-600">Email:</span>
             <Input type={"email"} placeholder="email@email.com" value={email} onChange={e => setEmail(e.target.value)} data-cy="forgotPasswordEmailInput" />
           </label>
 
@@ -63,9 +63,9 @@ export default function ForgotPasswordPage() {
         </form>
 
         {email &&
-          <span className="text-green-600" data-cy="emailSentMessage">{message?.content}</span>
+          <span className="text-green-700" data-cy="emailSentMessage">{message?.content}</span>
         }
       </div>
-    </div >
+    </main>
   )
 }
