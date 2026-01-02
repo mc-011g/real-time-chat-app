@@ -10,8 +10,8 @@ vi.mock("../../socket", () => ({
 vi.mock("axios");
 
 import axios from "axios";
-import { type User } from "firebase/auth";
-import type { GroupType } from "../../types/types";
+import { type User as FirebaseUser } from "firebase/auth";
+import type { GroupType, User } from "../../types/types";
 import { createGroupThunk } from "./createGroupThunk";
 import { addGroup } from "../slices/groupsSlice";
 
@@ -34,8 +34,17 @@ describe("createGroupThunk", () => {
     });
 
     it("dispatches addGroup with a successfull API call", async () => {
-        const mockFirebaseUser: Partial<User> = { //creates mock user with only neccessary info thunk needs
+        const mockFirebaseUser: Partial<FirebaseUser> = { //creates mock user with only neccessary info thunk needs
             getIdToken: vi.fn().mockResolvedValue("token")
+        }
+
+        const mockUserDetails: User = {
+            _id: '1',
+            bgColor: 'blue',
+            email: 'test@email.com',
+            firstName: 'TestFirst',
+            lastName: 'TestLast',
+            groupIds: ['1', '2', '3']
         }
 
         const group: GroupType = {
@@ -48,7 +57,7 @@ describe("createGroupThunk", () => {
 
         const { socket } = await import("../../socket");
 
-        const thunk = createGroupThunk(mockFirebaseUser as User, "Group A");
+        const thunk = createGroupThunk(mockFirebaseUser as FirebaseUser, "Group A", mockUserDetails);
         const result = await thunk(mockDispatch);
 
         expect(mockFirebaseUser.getIdToken).toHaveBeenCalled();
