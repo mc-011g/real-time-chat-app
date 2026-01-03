@@ -77,7 +77,7 @@ export default function SendMessageBar() {
 
           <label className="sr-only" htmlFor="sendMessageInputBox">Send a message</label>
           <Input
-            disabled={joinedGroup === selectedGroup._id}
+            disabled={joinedGroup !== selectedGroup._id}
             placeholder="Enter a message"
             type="text"
             value={message}
