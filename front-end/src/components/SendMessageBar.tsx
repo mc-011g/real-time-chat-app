@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import type { MessageType } from "../types/types";
@@ -60,6 +60,16 @@ export default function SendMessageBar() {
     }
   }
 
+  const [joinedGroup, setJoinedGroup] = useState<string | null>(null);
+
+  useEffect(() => {
+    socket.on('joined-group', setJoinedGroup);
+
+    return () => {
+      socket.off('joined-group', setJoinedGroup);
+    }
+  }, []);
+
   return (
     <>
       {selectedGroup && (
@@ -67,6 +77,7 @@ export default function SendMessageBar() {
 
           <label className="sr-only" htmlFor="sendMessageInputBox">Send a message</label>
           <Input
+            disabled={joinedGroup === selectedGroup._id}
             placeholder="Enter a message"
             type="text"
             value={message}

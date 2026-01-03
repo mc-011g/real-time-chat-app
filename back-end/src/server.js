@@ -39,6 +39,7 @@ const allowedOrigins = [
 ];
 
 const io = new Server(server, {
+    connectionStateRecovery: {},
     cors: {
         origin: allowedOrigins,
         credentials: true
@@ -165,6 +166,7 @@ io.on('connection', (socket) => {
 
     socket.on('join-group', (groupId) => {
         socket.join(groupId);
+        socket.emit('joined-group', groupId);
     });  
 
     socket.on('send-message', (message, groupId) => {
